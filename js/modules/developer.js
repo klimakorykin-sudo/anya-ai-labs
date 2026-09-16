@@ -19,7 +19,9 @@ const DEVELOPER_PROJECTS =
   "3. Anya — ещё один проект для неё\n" +
   "   https://klimakorykin-sudo.github.io/Anya/\n\n" +
   "4. Game Anya v5.34.68 — игра про Аню\n" +
-  "   https://klimakorykin-sudo.github.io/game_anya_v5.34.68/";
+  "   https://klimakorykin-sudo.github.io/game_anya_v5.34.68/\n\n" +
+  "5. 🎄 Анечке с любовью — новогодний сюрприз\n" +
+  "   https://klimakorykin-sudo.github.io/new-year/index.html";
 
 const DeveloperModule = {
   handle(text) {

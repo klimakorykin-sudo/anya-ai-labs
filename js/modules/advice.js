@@ -1,4 +1,10 @@
-﻿const AdviceModule = {
+// ============================================================
+// ADVICE.JS — Советы по настроению
+// Триггеры: конкретные эмоции, НЕ «что делать» (слишком общее)
+// ============================================================
+
+const AdviceModule = {
+
   tips: {
     sad: [
       "💖 Попробуй: 5 глубоких вдохов, потом чашка тёплого чая.",
@@ -57,17 +63,22 @@
 
   handle(text) {
     const t = text.toLowerCase();
-    if (!/(что делать|посовет|совет|подскажи|скучно|устал|злюсь|груст|тревог|беспоко)/.test(t)) return null;
 
-    if (/скучно/.test(t)) return { text: pick(this.tips.bored) };
-    if (/устал/.test(t)) return { text: pick(this.tips.tired) };
-    if (/злюсь|бесит|злит|ярост/.test(t)) return { text: pick(this.tips.angry) };
-    if (/груст|плохо|печаль/.test(t)) return { text: pick(this.tips.sad) };
-    if (/тревог|беспоко|нервнич|волнуюсь/.test(t)) return { text: pick(this.tips.anxious) };
+    // Точные триггеры — конкретные эмоции/состояния
+    // Убрали «что делать» и «посовет» — они слишком общие и перехватывают чужие темы
+    if (/(скучно|скучно мне|мне скучно)/.test(t)) return { text: pick(this.tips.bored) };
+    if (/(устал|устала|нет сил|вымат|измотан)/.test(t)) return { text: pick(this.tips.tired) };
+    if (/(злюсь|бесит|злит|ярост|ненавиж)/.test(t)) return { text: pick(this.tips.angry) };
+    if (/(груст|плохо|печаль|тоск|расстроен)/.test(t)) return { text: pick(this.tips.sad) };
+    if (/(тревог|беспоко|нервнич|волнуюсь|паник)/.test(t)) return { text: pick(this.tips.anxious) };
 
-    if (/(что делать|посовет|совет|подскажи)/.test(t)) {
-      const all = [...this.tips.bored, ...this.tips.sad, ...this.tips.anxious];
-      return { text: pick(all) };
+    // Только конкретные «посоветуй от скуки/грусти»
+    if (/(посовет|подскажи).*(скучн|груст|устал|тревог|злюсь)/.test(t)) {
+      if (/скучн/.test(t)) return { text: pick(this.tips.bored) };
+      if (/груст/.test(t)) return { text: pick(this.tips.sad) };
+      if (/устал/.test(t)) return { text: pick(this.tips.tired) };
+      if (/тревог/.test(t)) return { text: pick(this.tips.anxious) };
+      if (/злюсь/.test(t)) return { text: pick(this.tips.angry) };
     }
 
     return null;

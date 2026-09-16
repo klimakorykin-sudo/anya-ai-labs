@@ -5,6 +5,7 @@
 const Brain = {
 
   modules: [
+    PersonalModule,
     DeveloperModule,
     CrisisModule,
     PsychologistModule,

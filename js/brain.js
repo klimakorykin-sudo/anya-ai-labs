@@ -1,16 +1,25 @@
 // ============================================================
 // BRAIN.JS — Мозг Ани
+// Порядок модулей ВАЖЕН!
 // ============================================================
 
 const Brain = {
 
   modules: [
+    // === ЛИЧНОЕ (первыми — чтобы поймать имя, класс, разработчика) ===
+    NameModule,
     PersonalModule,
     DeveloperModule,
+
+    // === КРИЗИС (всегда рано!) ===
     CrisisModule,
+
+    // === ПСИХОЛОГИЯ ===
     PsychologistModule,
     MoodModule,
     CheckinModule,
+
+    // === ЗДОРОВЬЕ ===
     AnatomyTerms,
     AnatomyModule,
     SexEdModule,
@@ -18,24 +27,36 @@ const Brain = {
     FirstAidModule,
     EmergencyModule,
     SafetyModule,
+
+    // === ФОТО ===
     PhotosModule,
+
+    // === КОД ===
     CodingModule,
     InformaticsModule,
     DiscreteModule,
     RedTeamModule,
+
+    // === УЧЁБА ===
     EssayModule,
     MathModule,
     EnglishModule,
     HomeworkModule,
-    FamousModule,
+    TeacherModule,
     LiteratureModule,
     GeographyModule,
-    TeacherModule,
+
+    // === ИЗВЕСТНЫЕ ЛЮДИ ===
+    FamousModule,
+
+    // === РАЗВЛЕЧЕНИЯ ===
     GamesModule,
     RiddlesModule,
     JokesModule,
     StoriesModule,
     DialoguesModule,
+
+    // === ПОЛЕЗНОЕ ===
     FactsModule,
     QuotesModule,
     ComplimentsModule,
@@ -66,7 +87,7 @@ const Brain = {
       ? Understand.understandText(trimmed)
       : trimmed.toLowerCase();
 
-    // 0. КРИЗИС
+    // 0. КРИЗИС — перехватывает всё
     if (typeof CrisisModule !== "undefined" && CrisisModule.isCrisis(normalized)) {
       return CrisisModule.handle(normalized);
     }
@@ -99,14 +120,14 @@ const Brain = {
       return { text: pick(PHRASES.garbage) };
     }
 
-    // Поиск
+    // Поиск в интернете
     if (typeof SearchModule !== "undefined" && SearchModule.detectSearchRequest(normalized)) {
       const query = SearchModule.extractQuery(normalized);
       const result = await SearchModule.simulateSearch(query);
       return { text: result, isHTML: true };
     }
 
-    // Модули
+    // Прогон через модули
     for (const module of this.modules) {
       try {
         if (!module || typeof module.handle !== "function") continue;
@@ -122,7 +143,7 @@ const Brain = {
       }
     }
 
-    // Простые фразы
+    // === Простые фразы (если модули не ответили) ===
     const t = normalized;
 
     if (/(кто.*лучш|лучшая|идеал.*разработчик|аня.*лучш)/.test(t)) {
@@ -153,6 +174,7 @@ const Brain = {
       return { text: pick(PHRASES.bye) };
     }
 
+    // Языковые подсказки
     if (lang.hasCJK) {
       return { text: "Ого, ты написал на другом языке! 🌏 Круто! Я понимаю не всё, но рада 💫" };
     }
@@ -166,6 +188,7 @@ const Brain = {
       return { text: pick(["И тебе ✨", "Классные смайлики! 💖", "🌸", "😊"]) };
     }
 
+    // Вопрос со знаком ?
     if (normalized.endsWith("?")) {
       return { text: pick([
         "Хороший вопрос! 🤔 Давай порассуждаем вместе 💫",
@@ -176,6 +199,7 @@ const Brain = {
       ]) };
     }
 
+    // По эмоции
     if (emotion === "sadness") {
       return { text: pick(PHRASES.sad) };
     }
@@ -192,6 +216,7 @@ const Brain = {
       return { text: "💖 Как приятно! Расскажи подробнее?" };
     }
 
+    // Дефолт
     return { text: pick(PHRASES.unknown) };
   },
 

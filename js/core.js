@@ -1,8 +1,7 @@
-﻿// ============================================================
-// CORE.JS — Ядро Ани (с системой чатов)
+// ============================================================
+// CORE.JS — Ядро Ани (с Markdown + вопрос про возраст/класс)
 // ============================================================
 
-// ============ ЭЛЕМЕНТЫ ============
 const chat = document.getElementById("chat");
 const input = document.getElementById("input");
 const sendBtn = document.getElementById("send");
@@ -13,52 +12,50 @@ const helpContent = document.getElementById("helpContent");
 const closeHelp = document.getElementById("closeHelp");
 const statusLabel = document.getElementById("statusLabel");
 
-// ============ СОСТОЯНИЕ ============
 let isProcessing = false;
 let lastMessageDate = null;
+
+// ============================================================
+// MARKDOWN ПАРСЕР
+// ============================================================
+function parseMarkdown(text) {
+  if (!text) return "";
+  return String(text)
+    .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
+    .replace(/(?<!\*)\*([^*]+?)\*(?!\*)/g, "<i>$1</i>")
+    .replace(/`([^`]+)`/g, "<code>$1</code>");
+}
 
 // ============================================================
 // ИНИЦИАЛИЗАЦИЯ
 // ============================================================
 async function initAnya() {
   try {
-    // 1. Инициализация памяти
     await MemoryDB.init();
     await Achievements.init();
 
-    // 2. Инициализация чатов
     if (typeof Chats !== "undefined") {
       await Chats.init();
     }
 
-    // 3. Инициализация микрофона
     if (typeof VoiceInput !== "undefined") {
       VoiceInput.init();
     }
 
-    // 4. Загрузка контекста из истории
     await loadContextFromHistory();
-
-    // 5. Установка обработчиков
     setupListeners();
-
-    // 6. Частицы при загрузке
     spawnParticles();
 
-    // 7. Приветствие — только если в текущем чате нет сообщений
     const chatEl = document.getElementById("chat");
     if (chatEl && chatEl.children.length === 0) {
       await sendGreeting();
     }
 
-    // 8. Ежедневный чек-ин
     await maybeCheckin();
 
-    // 9. Проверка достижений
     const stats = await Stats.getStats();
     await Achievements.checkAll(stats);
 
-    // 10. Проверка праздника
     const holiday = Secrets.checkHoliday();
     if (holiday) {
       setTimeout(() => addMsg(holiday, "bot"), 2000);
@@ -74,7 +71,6 @@ async function initAnya() {
 // ОБРАБОТЧИКИ
 // ============================================================
 function setupListeners() {
-  // === Отправка ===
   if (sendBtn) sendBtn.addEventListener("click", () => handleSend());
   if (input) {
     input.addEventListener("keydown", e => {
@@ -86,7 +82,6 @@ function setupListeners() {
     input.addEventListener("input", updateSendButton);
   }
 
-  // === Кнопка Помощь ===
   if (helpBtn) {
     helpBtn.addEventListener("click", () => {
       if (helpContent) helpContent.textContent = allHotlinesText();
@@ -104,14 +99,12 @@ function setupListeners() {
     });
   }
 
-  // === Konami-код ===
   document.addEventListener("keydown", e => {
     if (Secrets.checkKonami(e.key)) {
       addMsg(Secrets.konamiReward(), "bot");
     }
   });
 
-  // === ЧАТЫ ===
   const chatsToggle = document.getElementById("chatsToggle");
   const closeChatsBtn = document.getElementById("closeChatsBtn");
   const newChatBtn = document.getElementById("newChatBtn");
@@ -149,7 +142,6 @@ function setupListeners() {
     });
   }
 
-  // === Закрытие панели чатов по Escape ===
   document.addEventListener("keydown", e => {
     if (e.key === "Escape") {
       if (chatsPanel) chatsPanel.classList.remove("open");
@@ -166,11 +158,10 @@ function updateSendButton() {
 }
 
 // ============================================================
-// ЗАГРУЗКА КОНТЕКСТА ИЗ ПАМЯТИ
+// ЗАГРУЗКА КОНТЕКСТА
 // ============================================================
 async function loadContextFromHistory() {
   try {
-    // Если есть текущий чат — берём его сообщения
     if (typeof Chats !== "undefined" && Chats.currentChatId) {
       const messages = await ChatsDB.getMessages(Chats.currentChatId);
       if (messages.length > 0) {
@@ -182,7 +173,6 @@ async function loadContextFromHistory() {
       }
     }
 
-    // Иначе — из общей истории
     const history = await MemoryDB.recentHistory(30);
     if (history.length > 0) {
       Context.history = history;
@@ -198,7 +188,6 @@ async function loadContextFromHistory() {
 function addMsg(text, who = "bot", isHTML = false, photo = null) {
   if (!chat) return;
 
-  // Разделитель дат
   const today = todayKey();
   if (lastMessageDate !== today) {
     const divider = document.createElement("div");
@@ -285,11 +274,10 @@ async function handleSend(customText) {
   isProcessing = true;
   if (sendBtn) sendBtn.disabled = true;
 
-  // Добавляем сообщение пользователя
   addMsg(text, "user");
   if (input) input.value = "";
 
-  // Память: имя
+  // Запомнить имя
   const nameMatch = text.match(/меня зовут ([А-Яа-яЁёA-Za-z]+)/i);
   if (nameMatch) {
     await MemoryDB.set("name", nameMatch[1]);
@@ -297,43 +285,52 @@ async function handleSend(customText) {
     if (ach) setTimeout(() => addMsg(`${ach.icon} Достижение: ${ach.name}!`, "bot"), 1500);
   }
 
-  // Статистика
+  // Запомнить класс
+  const gradeMatch = text.match(/(?:я в|учусь в)\s+(\d{1,2})\s*класс/i);
+  if (gradeMatch) {
+    const grade = parseInt(gradeMatch[1]);
+    if (grade >= 1 && grade <= 11) {
+      await MemoryDB.set("grade", grade);
+    }
+  }
+
+  // Запомнить возраст
+  const ageMatch = text.match(/мне\s+(\d{1,3})\s*(?:лет|года|год)/i);
+  if (ageMatch) {
+    const age = parseInt(ageMatch[1]);
+    if (age > 0 && age < 120) {
+      await MemoryDB.set("age", age);
+    }
+  }
+
   try {
     await Stats.bump();
     await Stats.trackWords(text);
   } catch (e) {}
 
-  // Показываем «печатает»
   showTyping();
 
-  // Небольшая задержка для естественности
   const delay = rnd(500, 1400);
   await new Promise(r => setTimeout(r, delay));
 
   try {
-    // Снимаем обращение «Аня, ...»
     const cleanText = Brain.cleanInput(text);
-
-    // Думаем
     const reply = await Brain.think(cleanText);
 
     hideTyping();
 
-    // Выводим ответ
     if (reply.photo) {
-      addMsg(reply.text, "bot", false, reply.photo);
+      addMsg(parseMarkdown(reply.text), "bot", true, reply.photo);
       const ach = await Achievements.unlock("first_photo");
       if (ach) setTimeout(() => addMsg(`${ach.icon} Достижение: ${ach.name}!`, "bot"), 1500);
     } else if (reply.isHTML || /<pre>|<a |<code>|<b>/.test(reply.text || "")) {
       addMsg(reply.text, "bot", true);
     } else {
-      addMsg(reply.text, "bot");
+      addMsg(parseMarkdown(reply.text), "bot", true);
     }
 
-    // Сохраняем в контекст
     Context.push(text, reply.text);
 
-    // ⭐ Сохраняем в текущий чат И общую память
     try {
       if (typeof Chats !== "undefined") {
         await Chats.saveMessage(text, reply.text, reply.photo || null);
@@ -341,12 +338,10 @@ async function handleSend(customText) {
       await MemoryDB.addHistory(text, reply.text);
     } catch (e) {}
 
-    // Озвучка (если включена)
     if (window.speakAnya && window.VoiceOutput && VoiceOutput.enabled) {
       VoiceOutput.speak(reply.text);
     }
 
-    // Проверяем достижения
     const stats = await Stats.getStats();
     const newAch = await Achievements.checkAll(stats);
     if (newAch) {
@@ -364,10 +359,12 @@ async function handleSend(customText) {
 }
 
 // ============================================================
-// ПРИВЕТСТВИЕ
+// ПРИВЕТСТВИЕ + ВОПРОС ПРО ВОЗРАСТ И КЛАСС
 // ============================================================
 async function sendGreeting() {
   const name = await MemoryDB.get("name");
+  const grade = await MemoryDB.get("grade");
+  const age = await MemoryDB.get("age");
   const stats = await Stats.getStats();
   const hour = new Date().getHours();
 
@@ -388,9 +385,16 @@ async function sendGreeting() {
     msg += "\n\n💫 Я помню наши прошлые разговоры.";
   }
 
-  addMsg(msg, "bot");
+  // Вопрос про возраст и класс — если ещё не сказаны
+  if (!grade && !age) {
+    msg += "\n\nЧтобы объяснять понятнее, скажи:\n" +
+           "• Сколько тебе лет?\n" +
+           "• В каком ты классе?\n\n" +
+           "Например: «Мне 13, я в 7 классе». Можно пропустить.";
+  }
 
-  // Сохраняем приветствие в чат
+  addMsg(parseMarkdown(msg), "bot", true);
+
   try {
     if (typeof Chats !== "undefined") {
       await Chats.saveMessage("", msg);
@@ -406,7 +410,7 @@ async function maybeCheckin() {
     if (await CheckinModule.shouldCheckin()) {
       setTimeout(async () => {
         const checkinMsg = await CheckinModule.getCheckinMessage();
-        addMsg(checkinMsg, "bot");
+        addMsg(parseMarkdown(checkinMsg), "bot", true);
 
         if (typeof Chats !== "undefined") {
           await Chats.saveMessage("", checkinMsg);
@@ -497,6 +501,8 @@ async function resetMemory() {
 // ============================================================
 async function showProfile() {
   const name = await MemoryDB.get("name");
+  const grade = await MemoryDB.get("grade");
+  const age = await MemoryDB.get("age");
   const facts = await MemoryDB.allFacts();
   const notes = await MemoryDB.allNotes();
   const stats = await Stats.getStats();
@@ -505,6 +511,8 @@ async function showProfile() {
 
   let out = "👤 Что Аня знает обо мне:\n\n";
   out += `📛 Имя: ${name || "(не сказал)"}\n`;
+  out += `📚 Класс: ${grade || "(не сказал)"}\n`;
+  out += `🎂 Возраст: ${age ? age + " лет" : "(не сказал)"}\n`;
   out += `💬 Сообщений: ${stats.count}\n`;
   out += `📅 Дней с Аней: ${stats.daysWith}\n`;
   out += `🔥 Стрик: ${stats.streak}\n\n`;
@@ -531,19 +539,16 @@ async function showProfile() {
 }
 
 // ============================================================
-// СТАТИСТИКА
+// СТАТИСТИКА / ДОСТИЖЕНИЯ
 // ============================================================
 async function showStats() {
   const statsText = await Stats.format();
-  addMsg(statsText, "bot");
+  addMsg(parseMarkdown(statsText), "bot", true);
 }
 
-// ============================================================
-// ДОСТИЖЕНИЯ
-// ============================================================
 async function showAchievements() {
   const achText = await Achievements.format();
-  addMsg(achText, "bot");
+  addMsg(parseMarkdown(achText), "bot", true);
 }
 
 // ============================================================
@@ -555,7 +560,6 @@ if (document.readyState === "loading") {
   initAnya();
 }
 
-// Экспорт функций
 window.anyaExport = exportDialog;
 window.anyaReset = resetMemory;
 window.anyaProfile = showProfile;

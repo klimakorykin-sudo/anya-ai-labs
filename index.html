@@ -46,10 +46,8 @@
     </div>
   </div>
 
-  <!-- ЗАТЕМНЕНИЕ -->
   <div class="chats-backdrop" id="chatsBackdrop"></div>
 
-  <!-- ПАНЕЛЬ ЧАТОВ -->
   <div class="chats-panel" id="chatsPanel">
     <div class="chats-panel-header">
       <h3>💬 Мои чаты</h3>
@@ -61,7 +59,6 @@
     <div class="chats-list" id="chatsList"></div>
   </div>
 
-  <!-- ПОМОЩЬ -->
   <div class="menu-overlay" id="helpOverlay">
     <div class="menu help-menu">
       <h2>🆘 Если тебе плохо</h2>
@@ -70,9 +67,7 @@
     </div>
   </div>
 
-  <!-- ============================================ -->
-  <!-- ДАННЫЕ                                        -->
-  <!-- ============================================ -->
+  <!-- ДАННЫЕ -->
   <script src="js/data/phrases.js"></script>
   <script src="js/data/firstaid_data.js"></script>
   <script src="js/data/emergency_data.js"></script>
@@ -95,9 +90,7 @@
   <script src="js/data/responses/smart.js"></script>
   <script src="js/data/responses/love_replies.js"></script>
 
-  <!-- ============================================ -->
-  <!-- ЯДРО                                          -->
-  <!-- ============================================ -->
+  <!-- ЯДРО -->
   <script src="js/language.js"></script>
   <script src="js/understand.js"></script>
   <script src="js/emotions.js"></script>
@@ -114,10 +107,9 @@
   <script src="js/chats-db.js"></script>
   <script src="js/chats.js"></script>
 
-  <!-- ============================================ -->
-  <!-- МОДУЛИ                                        -->
-  <!-- ============================================ -->
+  <!-- МОДУЛИ -->
   <script src="js/modules/personal.js"></script>
+  <script src="js/modules/developer.js"></script>
   <script src="js/modules/photos.js"></script>
   <script src="js/modules/firstaid.js"></script>
   <script src="js/modules/emergency.js"></script>
@@ -152,15 +144,21 @@
   <script src="js/modules/mood.js"></script>
   <script src="js/modules/checkin.js"></script>
 
-  <!-- ============================================ -->
-  <!-- МОЗГ                                          -->
-  <!-- ============================================ -->
+  <!-- НОВЫЕ ЗНАНИЯ -->
+  <script src="js/modules/anatomy_terms.js"></script>
+  <script src="js/modules/anatomy.js"></script>
+  <script src="js/modules/sex_ed.js"></script>
+  <script src="js/modules/biology.js"></script>
+  <script src="js/modules/informatics.js"></script>
+  <script src="js/modules/discrete.js"></script>
+  <script src="js/modules/redteam.js"></script>
+  <script src="js/modules/literature.js"></script>
+  <script src="js/modules/geography.js"></script>
+
+  <!-- МОЗГ -->
   <script src="js/brain.js"></script>
   <script src="js/core.js"></script>
 
-  <!-- ============================================ -->
-  <!-- PWA                                           -->
-  <!-- ============================================ -->
   <script>
     if ("serviceWorker" in navigator && location.protocol !== "file:") {
       window.addEventListener("load", () => {

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#1a0033">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Аня ✨</title>
@@ -69,7 +70,9 @@
     </div>
   </div>
 
-  <!-- ДАННЫЕ -->
+  <!-- ============================================ -->
+  <!-- ДАННЫЕ                                        -->
+  <!-- ============================================ -->
   <script src="js/data/phrases.js"></script>
   <script src="js/data/firstaid_data.js"></script>
   <script src="js/data/emergency_data.js"></script>
@@ -92,7 +95,9 @@
   <script src="js/data/responses/smart.js"></script>
   <script src="js/data/responses/love_replies.js"></script>
 
-  <!-- ЯДРО -->
+  <!-- ============================================ -->
+  <!-- ЯДРО                                          -->
+  <!-- ============================================ -->
   <script src="js/language.js"></script>
   <script src="js/understand.js"></script>
   <script src="js/emotions.js"></script>
@@ -109,7 +114,9 @@
   <script src="js/chats-db.js"></script>
   <script src="js/chats.js"></script>
 
-  <!-- МОДУЛИ -->
+  <!-- ============================================ -->
+  <!-- МОДУЛИ                                        -->
+  <!-- ============================================ -->
   <script src="js/modules/personal.js"></script>
   <script src="js/modules/photos.js"></script>
   <script src="js/modules/firstaid.js"></script>
@@ -145,10 +152,15 @@
   <script src="js/modules/mood.js"></script>
   <script src="js/modules/checkin.js"></script>
 
-  <!-- МОЗГ -->
+  <!-- ============================================ -->
+  <!-- МОЗГ                                          -->
+  <!-- ============================================ -->
   <script src="js/brain.js"></script>
   <script src="js/core.js"></script>
 
+  <!-- ============================================ -->
+  <!-- PWA                                           -->
+  <!-- ============================================ -->
   <script>
     if ("serviceWorker" in navigator && location.protocol !== "file:") {
       window.addEventListener("load", () => {

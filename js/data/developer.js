@@ -1,25 +1,37 @@
-﻿// 👤 DEVELOPER.JS — секретное сообщение про разработчика
-// Срабатывает ТОЛЬКО если написать слово "разработчик" маленькими буквами
+// ============================================================
+// DEVELOPER.JS (data) — Данные про разработчика
+// Срабатывает только на точное слово "разработчик" (маленькими)
+// ВАЖНО: переменные с префиксом DEV_DATA_ чтобы не конфликтовать
+//         с js/modules/developer.js
+// ============================================================
 
-const DEVELOPER_TRIGGER = "разработчик";
+const DEV_DATA_TRIGGER = "разработчик";
 
-const DEVELOPER_MESSAGE =
+const DEV_DATA_MESSAGE =
   "Клим сделал меня, чтобы показать тебе, Аня, насколько много ты для него значишь. " +
   "Я думаю, что он безнадёжно в тебя влюблён и тебе стоит прислушаться к этому. " +
   "Как ты к нему относишься?";
 
-const DeveloperModule = {
+const DEV_DATA_PROJECTS =
+  "\n\n📂 Проекты Клима для Ани:\n\n" +
+  "1. NEON // Аня — умный чат-бот\n" +
+  "   https://klimakorykin-sudo.github.io/anya_ai/\n\n" +
+  "2. Аня · Вдохновение — персональный сайт\n" +
+  "   https://klimakorykin-sudo.github.io/11533191120/index.html\n\n" +
+  "3. Anya — ещё один проект для неё\n" +
+  "   https://klimakorykin-sudo.github.io/Anya/\n\n" +
+  "4. Game Anya v5.34.68 — игра про Аню\n" +
+  "   https://klimakorykin-sudo.github.io/game_anya_v5.34.68/\n\n" +
+  "5. 🎄 Анечке с любовью — новогодний сюрприз\n" +
+  "   https://klimakorykin-sudo.github.io/new-year/index.html";
+
+// Модуль-обёртка (если используется)
+const DeveloperDataModule = {
   handle(text) {
-    // Проверяем ТОЧНОЕ совпадение с "разработчик" (без учёта пробелов по краям)
     const trimmed = text.trim();
-
-    // Условие: точно равно "разработчик" маленькими буквами
-    if (trimmed === DEVELOPER_TRIGGER) {
-      return { text: DEVELOPER_MESSAGE };
+    if (trimmed === DEV_DATA_TRIGGER) {
+      return { text: DEV_DATA_MESSAGE + DEV_DATA_PROJECTS };
     }
-
-    // Если написал с большой буквы или с другими словами — не срабатывает,
-    // пропускаем дальше (brain.js обработает как обычно)
     return null;
   }
 };

@@ -1,0 +1,63 @@
+﻿.theme-night {
+  background: linear-gradient(135deg, #1a0033, #2d1b4e, #4a1e5c);
+}
+
+.theme-day {
+  background: linear-gradient(135deg, #ffd6f5, #c9b6ff, #b6e0ff);
+}
+.theme-day .app {
+  background: rgba(255, 255, 255, 0.8);
+  color: #2d1b4e;
+  border-color: rgba(160, 107, 255, 0.5);
+}
+.theme-day .msg.bot {
+  background: transparent;
+  color: #2d1b4e;
+  border: none;
+}
+.theme-day .msg.user {
+  background: linear-gradient(135deg, #ff9edb, #ff6ec7);
+  color: #fff;
+}
+.theme-day .msg b, .theme-day .msg strong { color: #8a2be2; }
+.theme-day .msg a { color: #4a1e8a; }
+.theme-day .msg pre, .theme-day .msg code {
+  background: rgba(0,0,0,.1);
+  color: #2d1b4e;
+}
+.theme-day #input {
+  background: rgba(255,255,255,.7);
+  color: #2d1b4e;
+  border-color: rgba(160, 107, 255, 0.5);
+}
+.theme-day .chat { color: #2d1b4e; }
+.theme-day .sub { color: #4a1e5c; }
+.theme-day .date-divider { color: #4a1e5c; }
+.theme-day header { border-color: rgba(160, 107, 255, 0.25); }
+
+.theme-pink {
+  background: linear-gradient(135deg, #4a0033, #8a1b5c, #ff6ec7);
+}
+
+.theme-ocean {
+  background: linear-gradient(135deg, #003366, #1b5c8a, #6ecfff);
+}
+
+.theme-cyber {
+  background: linear-gradient(135deg, #0a001f, #1a0033, #0f3460);
+}
+.theme-cyber .app {
+  border-color: #00ffff;
+  box-shadow: 0 0 60px rgba(0, 255, 255, 0.4);
+}
+.theme-cyber header {
+  border-color: rgba(0,255,255,.3);
+}
+.theme-cyber .msg.user {
+  background: linear-gradient(135deg, #ff00ff, #cc00cc);
+}
+.theme-cyber .status-dot { background: #00ffff; box-shadow: 0 0 6px #00ffff; }
+
+.theme-sunset {
+  background: linear-gradient(135deg, #2b1055, #7597de, #ff6ec7);
+}

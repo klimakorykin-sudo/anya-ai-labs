@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1a0033">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Аня ✨</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/mic.css">
+  <link rel="stylesheet" href="css/chats.css">
+</head>
+<body class="theme-night">
+
+  <div class="stars"></div>
+  <div class="particles" id="particles"></div>
+  <div class="recording-indicator" id="recordingIndicator"></div>
+
+  <button id="helpBtn" class="help-btn" title="Помощь">🆘</button>
+
+  <div class="app">
+    <header>
+      <div class="header-row">
+        <button id="chatsToggle" class="chats-toggle" title="Чаты">☰</button>
+        <div>
+          <h1>Аня <span class="sparkle">✨</span></h1>
+          <p class="sub">
+            <span class="status-dot"></span>
+            <span id="statusLabel">онлайн</span>
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <div id="chat" class="chat"></div>
+
+    <div class="input-row">
+      <button id="micBtn" class="mic-btn" title="Голосовой ввод">🎤</button>
+      <input id="input" type="text" placeholder="Напиши Ане..." autocomplete="off">
+      <button id="send" title="Отправить" disabled>➤</button>
+    </div>
+  </div>
+
+  <!-- ЗАТЕМНЕНИЕ -->
+  <div class="chats-backdrop" id="chatsBackdrop"></div>
+
+  <!-- ПАНЕЛЬ ЧАТОВ -->
+  <div class="chats-panel" id="chatsPanel">
+    <div class="chats-panel-header">
+      <h3>💬 Мои чаты</h3>
+      <div class="chats-panel-actions">
+        <button class="chats-action new" id="newChatBtn" title="Новый чат">➕</button>
+        <button class="chats-action close" id="closeChatsBtn" title="Закрыть">✕</button>
+      </div>
+    </div>
+    <div class="chats-list" id="chatsList"></div>
+  </div>
+
+  <div class="menu-overlay" id="helpOverlay">
+    <div class="menu help-menu">
+      <h2>🆘 Если тебе плохо</h2>
+      <div id="helpContent" class="help-content"></div>
+      <button class="close-menu" id="closeHelp">Закрыть</button>
+    </div>
+  </div>
+
+  <!-- ДАННЫЕ -->
+  <script src="js/data/phrases.js"></script>
+  <script src="js/data/firstaid_data.js"></script>
+  <script src="js/data/emergency_data.js"></script>
+  <script src="js/data/dictionary.js"></script>
+  <script src="js/data/hotlines.js"></script>
+  <script src="js/data/psychologist_data.js"></script>
+  <script src="js/data/questions.js"></script>
+  <script src="js/data/love.js"></script>
+  <script src="js/data/developer.js"></script>
+
+  <script src="js/data/responses/greetings.js"></script>
+  <script src="js/data/responses/feelings.js"></script>
+  <script src="js/data/responses/thanks.js"></script>
+  <script src="js/data/responses/questions.js"></script>
+  <script src="js/data/responses/coding.js"></script>
+  <script src="js/data/responses/help.js"></script>
+  <script src="js/data/responses/jokes.js"></script>
+  <script src="js/data/responses/compliments.js"></script>
+  <script src="js/data/responses/smart.js"></script>
+  <script src="js/data/responses/love_replies.js"></script>
+
+  <!-- ЯДРО -->
+  <script src="js/language.js"></script>
+  <script src="js/understand.js"></script>
+  <script src="js/emotions.js"></script>
+  <script src="js/memorydb.js"></script>
+  <script src="js/context.js"></script>
+  <script src="js/intents.js"></script>
+  <script src="js/stats.js"></script>
+  <script src="js/achievements.js"></script>
+  <script src="js/secrets.js"></script>
+  <script src="js/voice-input.js"></script>
+  <script src="js/search.js"></script>
+
+  <!-- ЧАТЫ -->
+  <script src="js/chats-db.js"></script>
+  <script src="js/chats.js"></script>
+
+  <!-- МОДУЛИ -->
+  <script src="js/modules/photos.js"></script>
+  <script src="js/modules/firstaid.js"></script>
+  <script src="js/modules/emergency.js"></script>
+  <script src="js/modules/safety.js"></script>
+  <script src="js/modules/coding.js"></script>
+  <script src="js/modules/essays.js"></script>
+  <script src="js/modules/math.js"></script>
+  <script src="js/modules/english.js"></script>
+  <script src="js/modules/homework.js"></script>
+  <script src="js/modules/facts.js"></script>
+  <script src="js/modules/games.js"></script>
+  <script src="js/modules/riddles.js"></script>
+  <script src="js/modules/jokes.js"></script>
+  <script src="js/modules/compliments.js"></script>
+  <script src="js/modules/quotes.js"></script>
+  <script src="js/modules/horoscope.js"></script>
+  <script src="js/modules/password.js"></script>
+  <script src="js/modules/timer.js"></script>
+  <script src="js/modules/notes.js"></script>
+  <script src="js/modules/weather.js"></script>
+  <script src="js/modules/recipes.js"></script>
+  <script src="js/modules/translator.js"></script>
+  <script src="js/modules/calendar.js"></script>
+  <script src="js/modules/stories.js"></script>
+  <script src="js/modules/dialogues.js"></script>
+  <script src="js/modules/creativity.js"></script>
+  <script src="js/modules/teacher.js"></script>
+  <script src="js/modules/advice.js"></script>
+  <script src="js/modules/psychologist.js"></script>
+  <script src="js/modules/crisis.js"></script>
+  <script src="js/modules/mood.js"></script>
+  <script src="js/modules/checkin.js"></script>
+
+  <!-- МОЗГ -->
+  <script src="js/brain.js"></script>
+  <script src="js/core.js"></script>
+
+  <script>
+    if ("serviceWorker" in navigator && location.protocol !== "file:") {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("service-worker.js").catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>

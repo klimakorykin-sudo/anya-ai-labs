@@ -1,5 +1,5 @@
-﻿// ============================================================
-// BRAIN.JS — Мозг Ани (с пониманием текста)
+// ============================================================
+// BRAIN.JS — Мозг Ани
 // ============================================================
 
 const Brain = {
@@ -19,6 +19,7 @@ const Brain = {
     MathModule,
     EnglishModule,
     HomeworkModule,
+    FamousModule,
     TeacherModule,
     GamesModule,
     RiddlesModule,

@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="css/animations.css">
   <link rel="stylesheet" href="css/mic.css">
   <link rel="stylesheet" href="css/chats.css">
+  <link rel="stylesheet" href="css/consent.css">
 </head>
 <body class="theme-night">
 
@@ -65,6 +66,36 @@
       <h2>🆘 Если тебе плохо</h2>
       <div id="helpContent" class="help-content"></div>
       <button class="close-menu" id="closeHelp">Закрыть</button>
+    </div>
+  </div>
+
+  <!-- ОКНО СОГЛАСИЯ -->
+  <div class="consent-overlay" id="consentOverlay">
+    <div class="consent-box">
+      <h2>✨ Добро пожаловать к Ане</h2>
+      <p class="consent-sub">Пожалуйста, ознакомься и прими условия</p>
+
+      <div class="consent-terms">
+        <p><strong>1. Конфиденциальность</strong><br>
+        Твои данные (имя, класс, возраст) используются только для работы Ани в этом браузере. Они никуда не передаются.</p>
+
+        <p><strong>2. Безопасность</strong><br>
+        Ты сам(а) отвечаешь за сохранность своих данных на этом устройстве.</p>
+
+        <p><strong>3. Правила</strong><br>
+        Сайт создан для личного использования. Запрещено распространять ссылку без разрешения.</p>
+
+        <p><strong>4. Согласие</strong><br>
+        Нажимая «Принимаю», ты подтверждаешь, что прочитал(а) и согласен(на) с этими условиями.</p>
+
+        <p><strong>5. Доверие</strong><br>
+        Этот сайт создан с уважением и теплом к человеку, которому он посвящён. Если ты чувствуешь злость или несправедливость по отношению к ней — возможно, тебе стоит задуматься, зачем ты здесь. Нажимая «Принимаю», ты подтверждаешь, что готов(а) относиться с уважением.</p>
+      </div>
+
+      <div class="consent-buttons">
+        <button class="consent-btn decline" id="consentDecline">Отказаться</button>
+        <button class="consent-btn accept" id="consentAccept">Принимаю</button>
+      </div>
     </div>
   </div>
 
@@ -155,6 +186,9 @@
   <script src="js/modules/redteam.js"></script>
   <script src="js/modules/literature.js"></script>
   <script src="js/modules/geography.js"></script>
+
+  <!-- СОГЛАСИЕ -->
+  <script src="js/consent.js"></script>
 
   <!-- МОЗГ -->
   <script src="js/brain.js"></script>

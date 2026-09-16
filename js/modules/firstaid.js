@@ -11,12 +11,12 @@ const FirstAidModule = {
     if (/(судорог|приступ|эпилепс|seizure)/.test(t)) return "seizure";
     if (/(кровь.*нос|нос.*кров|из носа)/.test(t)) return "nosebleed";
     if (/(укус|пчела|оса|комар.*укус|insect)/.test(t)) return "insect_bite";
-    if (/(обморож|замёрз|переохлажд|frostbite)/.test(t)) return "heatstroke";
+    if (/(обморож|замёрз|переохлажд|frostbite)/.test(t)) return "frostbite";
     if (/(теплов.*удар|перегрев|heatstroke)/.test(t)) return "heatstroke";
     return null;
   },
 
-  // === ПРОДОЛЖЕНИЯ — что делать ПОСЛЕ ===
+  // === ПРОДОЛЖЕНИЯ ===
   continuations: {
     CPR: {
       after_wake: "🫀 Если человек очнулся после СЛР:\n\n" +
@@ -27,17 +27,37 @@ const FirstAidModule = {
         "5. Если снова потерял сознание — начинай СЛР заново.\n" +
         "6. Не оставляй одного до приезда 103.\n\n" +
         "❗ Даже если очнулся — врачи обязательны!",
+
+      shock: "🫀 Если человек в шоке (после СЛР):\n\n" +
+        "Шок — состояние, когда организм ослаблен и не справляется.\n\n" +
+        "Признаки шока:\n" +
+        "• Бледная, холодная, липкая кожа\n" +
+        "• Быстрый пульс (слабый)\n" +
+        "• Учащённое дыхание\n" +
+        "• Спутанное сознание\n" +
+        "• Тошнота\n\n" +
+        "Что делать:\n" +
+        "1. Уложи, приподними ноги на 20–30 см (если нет травмы).\n" +
+        "2. Укрой — чтобы было тепло.\n" +
+        "3. Не давай пить и есть!\n" +
+        "4. Успокой, говори спокойным тоном.\n" +
+        "5. Следи за дыханием — если остановится, начинай СЛР.\n" +
+        "6. Звони 103 и сообщи про шок.\n\n" +
+        "❗ Шок опасен для жизни — врачи обязательны!",
+
       no_breath: "🫀 Если не дышит:\n\n" +
         "1. Продолжай СЛР — 30 нажатий + 2 вдоха.\n" +
         "2. Не останавливайся до приезда скорой или пока не устанешь совсем.\n" +
         "3. Если устал — попроси кого-то сменить.\n" +
         "4. Если есть АНД (дефибриллятор) — используй, он подскажет.\n" +
         "5. Продолжай СЛР до приезда врачей.",
+
       after_call: "🫀 После звонка в 103:\n\n" +
         "1. Включи громкую связь — диспетчер будет подсказывать.\n" +
         "2. Начинай СЛР сразу — не жди скорую.\n" +
         "3. Если рядом есть люди — попроси помочь.\n" +
         "4. Не бойся навредить — при остановке сердца без СЛР шансов почти нет.",
+
       adult_child: "🫀 СЛР — взрослый vs ребёнок:\n\n" +
         "Взрослый:\n" +
         "• 30 нажатий + 2 вдоха\n" +
@@ -52,6 +72,7 @@ const FirstAidModule = {
         "• Глубина ~4 см\n" +
         "• Двумя пальцами\n\n" +
         "📌 Пропорции 30:2 для всех!",
+
       alone: "🫀 Если ты один:\n\n" +
         "1. Сначала позвони 103 (громкая связь).\n" +
         "2. Начинай СЛР.\n" +
@@ -59,6 +80,7 @@ const FirstAidModule = {
         "4. Не останавливайся без причины.\n\n" +
         "📌 Если есть АНД — используй его до СЛР."
     },
+
     bleeding: {
       after_stop: "🩸 Если кровь остановилась:\n\n" +
         "1. НЕ снимай повязку — она защищает рану.\n" +
@@ -66,6 +88,7 @@ const FirstAidModule = {
         "3. Обратись к врачу — нужна перевязка и проверка.\n" +
         "4. При жгуте — запиши время наложения.\n" +
         "5. Жгут снимает ТОЛЬКО врач.",
+
       not_stops: "🩸 Если кровь не останавливается:\n\n" +
         "1. Дави СИЛЬНЕЕ — не бойся.\n" +
         "2. Наложи жгут ВЫШЕ раны (при артериальном).\n" +
@@ -74,6 +97,7 @@ const FirstAidModule = {
         "5. Пострадавшего уложи, приподними ноги.\n\n" +
         "⚠️ Жгут — максимум 1 час летом, 30 минут зимой."
     },
+
     burn: {
       after_cool: "🔥 После охлаждения:\n\n" +
         "1. Накрой чистой сухой тканью или плёнкой.\n" +
@@ -81,11 +105,13 @@ const FirstAidModule = {
         "3. Не прокалывай пузыри.\n" +
         "4. Дай обезболивающее.\n" +
         "5. При сильном ожоге — 103.",
+
       bubbles: "🔥 Если появились пузыри:\n\n" +
         "1. НЕ прокалывай!\n" +
         "2. Накрой чистой тканью.\n" +
         "3. Обратись к врачу — нужна перевязка.\n" +
         "4. Следи за признаками инфекции (гной, покраснение).",
+
       bad_burn: "🔥 Когда ожог опасен:\n\n" +
         "Срочно 103, если:\n" +
         "• Ожог больше ладони пострадавшего\n" +
@@ -94,23 +120,27 @@ const FirstAidModule = {
         "• Дым, копоть, обожжённые волосы в носу\n" +
         "• Ребёнок или пожилой"
     },
+
     choking: {
       after_cough: "😮 Если человек закашлялся и предмет вышел:\n\n" +
         "1. Дай ему отдышаться.\n" +
         "2. Предложи воды (если может глотать).\n" +
         "3. Понаблюдай — не осталось ли что-то в горле.\n" +
         "4. Если кашель не проходит — обратись к врачу.",
+
       no_exit: "😮 Если предмет не выходит:\n\n" +
         "1. Продолжай приём Геймлиха.\n" +
         "2. Чередуй 5 ударов + 5 нажатий.\n" +
         "3. Если потерял сознание — начинай СЛР.\n" +
         "4. Звони 103.",
+
       child: "😮 Если подавился ребёнок:\n\n" +
         "1. Ребёнка старше 1 года — наклони вперёд, 5 ударов между лопатками.\n" +
         "2. Приём Геймлиха мягче, чем взрослому.\n" +
         "3. Младенца до 1 года — на животе, 5 ударов ладонью, потом 5 нажатий пальцами на грудь.\n" +
         "4. Звони 103."
     },
+
     fainting: {
       after_wake: "😵 После обморока:\n\n" +
         "1. НЕ давай резко вставать!\n" +
@@ -119,6 +149,7 @@ const FirstAidModule = {
         "4. Проверь — не ударился ли при падении.\n" +
         "5. Если обморок повторился — звони 103."
     },
+
     fracture: {
       after_splint: "🦴 После наложения шины:\n\n" +
         "1. Проверь, не перетянута ли — пальцы не должны синеть.\n" +
@@ -127,6 +158,7 @@ const FirstAidModule = {
         "4. Вези в травмпункт или звони 103.\n" +
         "5. Не давай пострадавшему есть (может нужна операция)."
     },
+
     poisoning: {
       after_call: "☠️ После звонка 103:\n\n" +
         "1. Слушай диспетчера — он скажет, вызывать ли рвоту.\n" +
@@ -135,6 +167,7 @@ const FirstAidModule = {
         "4. При отравлении газом — вынеси на свежий воздух.\n" +
         "5. Не давай молоко без указания врача."
     },
+
     seizure: {
       after_seizure: "⚡ После приступа:\n\n" +
         "1. Положи на бок (восстановительное положение).\n" +
@@ -144,6 +177,7 @@ const FirstAidModule = {
         "5. Не давай пить и есть сразу.\n" +
         "6. Если приступ повторился или длился >5 минут — 103."
     },
+
     nosebleed: {
       after_stop: "👃 После остановки:\n\n" +
         "1. Не сморкайся 2–3 часа.\n" +
@@ -153,19 +187,22 @@ const FirstAidModule = {
     }
   },
 
-  // === ОБРАБОТКА ПРОДОЛЖЕНИЙ ===
+  // === ПОИСК ПРОДОЛЖЕНИЯ ===
   detectContinuation(t) {
-    if (/(очнул|очнется|очнётся|пришёл в себя|пришел в себя|приходит в себя)/.test(t)) return "after_wake";
+    // ШОК — приоритет выше, чем «очнулся»
+    if (/(шок|шоков|в шоке)/.test(t)) return "shock";
+
+    if (/(очнул|очнется|очнётся|пришёл в себя|пришел в себя|приходит в себя|в себя пришёл)/.test(t)) return "after_wake";
     if (/(не дышит|перестал дышать|остановилось дыхание)/.test(t)) return "no_breath";
     if (/(после звонка|позвонил|после скорой)/.test(t)) return "after_call";
     if (/(взросл|ребёнок|ребенок|младенец|дети|малыш)/.test(t)) return "adult_child";
-    if (/(один|одна|сам|сама)/.test(t)) return "alone";
+    if (/(один|одна|сам|сама)\s+(дела|буду|оказал)/.test(t)) return "alone";
     if (/(после слр|что потом|что дальше|после реанимац)/.test(t)) return "after_wake";
-    if (/(остановилась|остановилась кровь|кровь остановилась)/.test(t)) return "after_stop";
+    if (/(кровь остановилась|остановилась кровь)/.test(t)) return "after_stop";
     if (/(не останавливается|не могу остановить)/.test(t)) return "not_stops";
     if (/(после охлажд|после воды)/.test(t)) return "after_cool";
     if (/(пузыр|волдыр)/.test(t)) return "bubbles";
-    if (/(опасн|срочно 103|когда 103|сильный ожог)/.test(t)) return "bad_burn";
+    if (/(опасн.*ожог|ожог.*опасн|срочно 103.*ожог)/.test(t)) return "bad_burn";
     if (/(закашлялся|вышел|вылетел|предмет вышел)/.test(t)) return "after_cough";
     if (/(не выходит|застрял|не вылетает)/.test(t)) return "no_exit";
     if (/(после шины|после фиксац)/.test(t)) return "after_splint";
@@ -200,56 +237,53 @@ const FirstAidModule = {
   handle(text) {
     const t = text.toLowerCase();
 
-    // 1. Ищем основную тему
     const topic = this.detectTopic(t);
-
-    // 2. Ищем продолжение (если есть контекст)
     const continuation = this.detectContinuation(t);
 
-    // Если есть контекст + продолжение — отвечаем продолжением
-    if (continuation && Context.mentioned("слр", 5)) {
-      const cont = this.formatContinuation("CPR", continuation);
-      if (cont) return { text: cont };
-    }
-    if (continuation && Context.mentioned("кровотеч", 5)) {
-      const cont = this.formatContinuation("bleeding", continuation);
-      if (cont) return { text: cont };
-    }
-    if (continuation && Context.mentioned("ожог", 5)) {
-      const cont = this.formatContinuation("burn", continuation);
-      if (cont) return { text: cont };
-    }
-    if (continuation && Context.mentioned("подав", 5)) {
-      const cont = this.formatContinuation("choking", continuation);
-      if (cont) return { text: cont };
-    }
-    if (continuation && Context.mentioned("обморок", 5)) {
-      const cont = this.formatContinuation("fainting", continuation);
-      if (cont) return { text: cont };
-    }
-    if (continuation && Context.mentioned("перелом", 5)) {
-      const cont = this.formatContinuation("fracture", continuation);
-      if (cont) return { text: cont };
-    }
-    if (continuation && Context.mentioned("отравл", 5)) {
-      const cont = this.formatContinuation("poisoning", continuation);
-      if (cont) return { text: cont };
-    }
-    if (continuation && Context.mentioned("судорог|приступ", 5)) {
-      const cont = this.formatContinuation("seizure", continuation);
-      if (cont) return { text: cont };
-    }
-    if (continuation && Context.mentioned("нос", 5)) {
-      const cont = this.formatContinuation("nosebleed", continuation);
-      if (cont) return { text: cont };
+    // Проверяем контекст — о чём недавно говорили
+    if (continuation) {
+      if (Context.mentioned("слр", 5) || Context.mentioned("реанимац", 5)) {
+        const cont = this.formatContinuation("CPR", continuation);
+        if (cont) return { text: cont };
+      }
+      if (Context.mentioned("кровотеч", 5)) {
+        const cont = this.formatContinuation("bleeding", continuation);
+        if (cont) return { text: cont };
+      }
+      if (Context.mentioned("ожог", 5)) {
+        const cont = this.formatContinuation("burn", continuation);
+        if (cont) return { text: cont };
+      }
+      if (Context.mentioned("подав", 5)) {
+        const cont = this.formatContinuation("choking", continuation);
+        if (cont) return { text: cont };
+      }
+      if (Context.mentioned("обморок", 5)) {
+        const cont = this.formatContinuation("fainting", continuation);
+        if (cont) return { text: cont };
+      }
+      if (Context.mentioned("перелом", 5)) {
+        const cont = this.formatContinuation("fracture", continuation);
+        if (cont) return { text: cont };
+      }
+      if (Context.mentioned("отравл", 5)) {
+        const cont = this.formatContinuation("poisoning", continuation);
+        if (cont) return { text: cont };
+      }
+      if (Context.mentioned("судорог", 5) || Context.mentioned("приступ", 5)) {
+        const cont = this.formatContinuation("seizure", continuation);
+        if (cont) return { text: cont };
+      }
+      if (Context.mentioned("нос", 5)) {
+        const cont = this.formatContinuation("nosebleed", continuation);
+        if (cont) return { text: cont };
+      }
     }
 
-    // 3. Если нашли основную тему — отвечаем
     if (topic) {
       return { text: this.format(topic) };
     }
 
-    // 4. Ничего не нашли — молчим
     return null;
   }
 };

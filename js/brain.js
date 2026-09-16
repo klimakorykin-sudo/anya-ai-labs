@@ -11,16 +11,25 @@ const Brain = {
     PsychologistModule,
     MoodModule,
     CheckinModule,
+    AnatomyTerms,
+    AnatomyModule,
+    SexEdModule,
+    BiologyModule,
     FirstAidModule,
     EmergencyModule,
     SafetyModule,
     PhotosModule,
     CodingModule,
+    InformaticsModule,
+    DiscreteModule,
+    RedTeamModule,
     EssayModule,
     MathModule,
     EnglishModule,
     HomeworkModule,
     FamousModule,
+    LiteratureModule,
+    GeographyModule,
     TeacherModule,
     GamesModule,
     RiddlesModule,
@@ -52,7 +61,7 @@ const Brain = {
       return { text: "Напиши что-нибудь 💖" };
     }
 
-    // ⭐ НОРМАЛИЗАЦИЯ — регистр, опечатки, пробелы
+    // Нормализация
     const normalized = typeof Understand !== "undefined"
       ? Understand.understandText(trimmed)
       : trimmed.toLowerCase();

@@ -17,8 +17,7 @@ const PersonalModule = {
       return { text: "Хм, ты ещё не говорил своё имя 🤔 Напиши: «Меня зовут ...»" };
     }
 
-    // === КАК ЗАПОМНИТЬ ИМЯ (из сообщения) ===
-    // Это уже делается в core.js, но можно проверить
+    // === ЗАПОМНИТЬ ИМЯ ===
     const nameMatch = text.match(/меня зовут ([А-Яа-яЁёA-Za-z]+)/i);
     if (nameMatch) {
       const name = nameMatch[1];
@@ -50,8 +49,8 @@ const PersonalModule = {
       }
     }
 
-    // === МОЯ ЛЮБИМАЯ ТЕМА ===
-    if (/(что я люблю|моя любимая тема|мои интересы|что мне нравится|о чём я люблю)/.test(t)) {
+    // === ЛЮБИМАЯ ТЕМА ===
+    if (/(что я люблю|моя любимая тема|мои интересы|что мне нравится)/.test(t)) {
       const topic = await MemoryDB.get("favorite_topic");
       if (topic) {
         return { text: `Ты любишь ${topic}! 💖` };
@@ -59,7 +58,6 @@ const PersonalModule = {
       return { text: "Ты не рассказывал про интересы 🤔 Напиши: «Я люблю ...»" };
     }
 
-    // === ЗАПОМНИТЬ ИНТЕРЕС ===
     const topicMatch = text.match(/(я люблю|мне нравится|моя любимая тема[:\s]+)([А-Яа-яЁёA-Za-z\s,]+)/i);
     if (topicMatch && topicMatch[2]) {
       const topic = topicMatch[2].trim().slice(0, 50);
@@ -69,29 +67,23 @@ const PersonalModule = {
       }
     }
 
-    // === ЧТО ТЫ ОБО МНЕ ЗНАЕШЬ ===
+    // === ПРОФИЛЬ ===
     if (/(что ты обо мне знаешь|что ты знаешь про меня|расскажи.*обо мне|информац.*обо мне|мой профиль)/.test(t)) {
       return { text: await this.getProfile() };
     }
 
-    // === СКОЛЬКО ДНЕЙ МЫ ЗНАКОМЫ ===
+    // === СКОЛЬКО ДНЕЙ ЗНАКОМЫ ===
     if (/(сколько.*(дней|мы знакомы)|как давно.*знакомы)/.test(t)) {
       const first = await MemoryDB.get("first_visit");
       if (first) {
         const days = Math.floor((Date.now() - first) / (1000 * 60 * 60 * 24)) + 1;
-        const name = await MemoryDB.get("name");
-        const nameStr = name ? `, ${name}` : "";
-        return { text: pick([
-          `Мы знакомы ${days} ${this.plural(days, "день", "дня", "дней")} 💫`,
-          `${days} ${this.plural(days, "день", "дня", "дней")} вместе! ✨${nameStr ? " " + nameStr : ""}`,
-          `Уже ${days} ${this.plural(days, "день", "дня", "дней")} как мы общаемся 💖`
-        ]) };
+        return { text: `Мы знакомы ${days} ${this.plural(days, "день", "дня", "дней")} 💫` };
       }
       return { text: "Пока не знаю. Наверное, мы только познакомились 💫" };
     }
 
-    // === ЗАБУДЬ ПРО МЕНЯ / СБРОС ===
-    if (/(забудь.*меня|удали.*данные|сотри.*память|забудь.*имя|очисти.*данные)/.test(t)) {
+    // === ЗАБУДЬ ===
+    if (/(забудь.*меня|удали.*данные|сотри.*память|забудь.*имя)/.test(t)) {
       await MemoryDB.delete("name");
       await MemoryDB.delete("age");
       await MemoryDB.delete("favorite_topic");
@@ -107,26 +99,18 @@ const PersonalModule = {
     const topic = await MemoryDB.get("favorite_topic");
     const facts = await MemoryDB.allFacts();
     const stats = await Stats.getStats();
-    const topWords = await Stats.getTopWords(5);
 
     let out = "👤 Вот что я знаю о тебе:\n\n";
-
     out += `📛 Имя: ${name || "неизвестно"}\n`;
     out += `🎂 Возраст: ${age ? age + " лет" : "неизвестно"}\n`;
     out += `💖 Любишь: ${topic || "неизвестно"}\n\n`;
-
     out += `📊 Статистика:\n`;
     out += `💬 Сообщений: ${stats.count}\n`;
     out += `📅 Дней вместе: ${stats.daysWith}\n`;
-    out += `🔥 Стрик: ${stats.streak}\n\n`;
-
-    if (topWords.length) {
-      out += `🏆 Частые слова: ${topWords.map(w => w[0]).join(", ")}\n\n`;
-    }
+    out += `🔥 Стрик: ${stats.streak}\n`;
 
     if (facts.length) {
-      out += `💾 Запомненные факты (${facts.length}):\n`;
-      facts.slice(-5).forEach(f => out += `• ${f.fact.slice(0, 80)}\n`);
+      out += `\n💾 Запомнено: ${facts.length} фактов\n`;
     }
 
     return out.trim();

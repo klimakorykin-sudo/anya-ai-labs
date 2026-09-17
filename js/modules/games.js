@@ -1,3 +1,7 @@
+// ============================================================
+// GAMES.JS — Игры с Аней + ссылки на онлайн-игры
+// ============================================================
+
 const GamesModule = {
   state: {
     active: null,
@@ -5,7 +9,12 @@ const GamesModule = {
     tries: 0,
     word: null,
     guessed: [],
-    board: null
+    board: null,
+    checkersBoard: null,
+    battleship: null,
+    wordleWord: null,
+    wordleTries: [],
+    blackjack: null
   },
 
   games: {
@@ -16,27 +25,52 @@ const GamesModule = {
     cities: "🏙 Города",
     tictactoe: "❌⭕ Крестики-нолики",
     truth: "💭 Правда или действие",
-    whoami: "🎭 Кто я?"
+    whoami: "🎭 Кто я?",
+    checkers: "⚫⚪ Шашки",
+    battleship: "🚢 Морской бой",
+    blackjack: "🃏 21 (очко)",
+    wordle: "📝 Угадай слово"
+  },
+
+  // Ссылки на онлайн-игры
+  onlineGames: {
+    "логические": [
+      "🧩 Sudoku — sudoku.com",
+      "🎯 2048 — play2048.co",
+      "🧠 Судоку-мастер — sudoku-master.com",
+      "♟ Шахматы — chess.com",
+      "♟ Личесс — lichess.org",
+      "🎲 Шашки онлайн — playok.com"
+    ],
+    "аркады": [
+      "🐍 Slither.io — slither.io",
+      "🟢 Agar.io — agar.io",
+      "🎮 Krunker — krunker.io",
+      "🚀 Diep.io — diep.io"
+    ],
+    "головоломки": [
+      "🧩 Puzzle.gg — puzzle.gg",
+      "🎨 Jigsaw — jigsawplanet.com",
+      "🔢 Wordle — powerlanguage.co.uk/wordle"
+    ],
+    "настольные": [
+      "🎲 Шахматы — chess.com",
+      "♟ Личесс — lichess.org",
+      "🎯 Шашки — playok.com",
+      "🃏 Карточные — 24h.pchome.com.tw (крупнейший сайт)"
+    ],
+    "слова": [
+      "📝 Wordle (рус) — wordle-ru.ru",
+      "🎯 Скрабл — scrabble.ru",
+      "💬 Балда — balda-game.ru"
+    ]
   },
 
   handle(text) {
     const t = text.toLowerCase();
 
-    // ⚠️ ЗАЩИТА: если это имя известного человека — не перехватываем
-    const knownNames = /(пушкин|чехов|толстой|достоевск|лермонтов|гоголь|тургенев|булгаков|шекспир|эйнштейн|ньютон|тесла|кюри|менделеев|ломоносов|гагарин|наполеон|пётр|петр|екатерина|давинчи|да винчи|моцарт|пикассо|клеопатра)/i;
-
-    // Если упомянуто известное имя с триггером "расскажи" / "кто" / "про" — пропускаем
-    if (knownNames.test(t) && /(расскажи|про|о|кто такой|кто такая|что)/i.test(t)) {
-      return null;
-    }
-
-    // Если короткое сообщение (1-2 слова) — это имя? Пропускаем
-    if (knownNames.test(t) && t.split(/\s+/).length <= 2 && !this.state.active) {
-      return null;
-    }
-
-    // Старт: список игр
-    if (/(поиграем|игр|game|развлеки|во что поиграть)/.test(t) && !this.state.active) {
+    // === СПИСОК ИГР ===
+    if (/(поиграем|игр|game|развлеки|во что поиграть)/.test(t) && !this.state.active && !/(ссылк|онлайн|сайт)/.test(t)) {
       return { text:
         "🎮 ВО ЧТО СЫГРАЕМ?\n\n" +
         "1. Угадай число (напиши «угадай число»)\n" +
@@ -46,45 +80,72 @@ const GamesModule = {
         "5. Города («города»)\n" +
         "6. Крестики-нолики («крестики»)\n" +
         "7. Правда или действие («правда или действие»)\n" +
-        "8. Кто я? («сыграем в кто я»)\n\n" +
-        "Напиши название!"
+        "8. Кто я? («сыграем в кто я»)\n" +
+        "9. Шашки («шашки»)\n" +
+        "10. Морской бой («морской бой»)\n" +
+        "11. 21 (очко) («21»)\n" +
+        "12. Угадай слово («угадай слово»)\n\n" +
+        "📱 Онлайн-игры — напиши «ссылки на игры»"
       };
     }
 
-    // Угадай число
+    // === ССЫЛКИ НА ОНЛАЙН-ИГРЫ ===
+    if (/(ссылк.*игр|онлайн.*игр|игр.*онлайн|играть.*онлайн|сайт.*игр|где поиграть)/.test(t)) {
+      return { text: this.formatOnlineGames(t) };
+    }
+
+    // === ИГРА 1: УГАДАЙ ЧИСЛО ===
     if (/угадай числ/.test(t)) return this.startGuess();
     if (this.state.active === "guess") return this.playGuess(text);
 
-    // Викторина
+    // === ИГРА 2: ВИКТОРИНА ===
     if (/викторин|quiz/.test(t)) return this.startQuiz();
     if (this.state.active === "quiz") return this.playQuiz(text);
 
-    // КНБ
+    // === ИГРА 3: КНБ ===
     if (/кнб|камень.*ножниц|ножниц.*бумаг/.test(t)) return this.startRPS();
     if (this.state.active === "rps") return this.playRPS(text);
 
-    // Виселица
+    // === ИГРА 4: ВИСЕЛИЦА ===
     if (/виселиц|hangman/.test(t)) return this.startHangman();
     if (this.state.active === "hangman") return this.playHangman(text);
 
-    // Города
+    // === ИГРА 5: ГОРОДА ===
     if (/^города$|поиграем.*город|игра.*город/.test(t)) return this.startCities();
     if (this.state.active === "cities") return this.playCities(text);
 
-    // Крестики-нолики
+    // === ИГРА 6: КРЕСТИКИ-НОЛИКИ ===
     if (/крестики|нолики|tictactoe/.test(t) && !this.state.active) return this.startTicTacToe();
+    if (this.state.active === "ttt") return this.playTicTacToe(text);
 
-    // Правда или действие
+    // === ИГРА 7: ПРАВДА ИЛИ ДЕЙСТВИЕ ===
     if (/правда.*действ|действ.*правд/.test(t)) return this.startTruth();
+    if (this.state.active === "truth") return this.playTruth(text);
 
-    // Кто я — ТОЛЬКО явные команды
+    // === ИГРА 8: КТО Я? ===
     if (/(сыграем в кто я|поиграем в кто я|угадай кто я|начать игру кто я|игра.*кто я)/.test(t)) {
       return this.startWhoAmI();
     }
     if (this.state.active === "whoami") return this.playWhoAmI(text);
 
-    // Сдаюсь
-    if (/сдаюсь|хватит|стоп.*игр|выйти из игр/.test(t) && this.state.active) {
+    // === ИГРА 9: ШАШКИ ===
+    if (/шашк/.test(t) && !this.state.active) return this.startCheckers();
+    if (this.state.active === "checkers") return this.playCheckers(text);
+
+    // === ИГРА 10: МОРСКОЙ БОЙ ===
+    if (/морск.*бой|battleship/.test(t) && !this.state.active) return this.startBattleship();
+    if (this.state.active === "battleship") return this.playBattleship(text);
+
+    // === ИГРА 11: 21 (ОЧКО) ===
+    if (/(^|\s)21(\s|$)|очко|блэкджек|blackjack/.test(t) && !this.state.active) return this.startBlackjack();
+    if (this.state.active === "blackjack") return this.playBlackjack(text);
+
+    // === ИГРА 12: УГАДАЙ СЛОВО ===
+    if (/угадай слов|wordle|вордл/.test(t) && !this.state.active) return this.startWordle();
+    if (this.state.active === "wordle") return this.playWordle(text);
+
+    // === СДАЮСЬ ===
+    if (/сдаюсь|хватит|стоп.*игр|выйти из игр|закончить/.test(t) && this.state.active) {
       this.state.active = null;
       return { text: "Хорошо! Сыграем в другой раз 💫" };
     }
@@ -92,7 +153,33 @@ const GamesModule = {
     return null;
   },
 
-  // === УГАДАЙ ЧИСЛО ===
+  // ============================================================
+  // ССЫЛКИ НА ОНЛАЙН-ИГРЫ
+  // ============================================================
+  formatOnlineGames(t) {
+    // Если указана категория
+    for (const [cat, links] of Object.entries(this.onlineGames)) {
+      if (t.includes(cat.slice(0, 5))) {
+        let out = "🎮 " + cat.toUpperCase() + " ИГРЫ:\n\n";
+        links.forEach(l => out += l + "\n");
+        return { text: out };
+      }
+    }
+
+    // Общий список
+    let out = "🎮 ОНЛАЙН-ИГРЫ (бесплатно, в браузере):\n\n";
+    for (const [cat, links] of Object.entries(this.onlineGames)) {
+      out += "📌 " + cat.charAt(0).toUpperCase() + cat.slice(1) + ":\n";
+      links.forEach(l => out += "• " + l + "\n");
+      out += "\n";
+    }
+    out += "Напиши категорию: «логические игры», «аркады», «головоломки»";
+    return { text: out };
+  },
+
+  // ============================================================
+  // 1. УГАДАЙ ЧИСЛО
+  // ============================================================
   startGuess() {
     this.state.active = "guess";
     this.state.target = rnd(1, 100);
@@ -106,30 +193,37 @@ const GamesModule = {
     if (num === this.state.target) {
       const tries = this.state.tries;
       this.state.active = null;
-      return { text: `🎉 Угадал! Это было ${num}. Попыток: ${tries}. Молодец! ✨` };
+      return { text: "🎉 Угадал! Это было " + num + ". Попыток: " + tries + ". Молодец! ✨" };
     }
     if (num < this.state.target) return { text: "📈 Больше!" };
     return { text: "📉 Меньше!" };
   },
 
-  // === ВИКТОРИНА ===
+  // ============================================================
+  // 2. ВИКТОРИНА
+  // ============================================================
   quizQuestions: [
     { q: "Какая планета ближе всего к Солнцу?", a: ["меркурий", "б"], correct: "Меркурий" },
     { q: "Сколько планет в Солнечной системе?", a: ["8", "восемь"], correct: "8" },
-    { q: "Кто написал «Евгения Онегина»?", a: ["пушкин", "александр"], correct: "Пушкин" },
-    { q: "Какой газ мы выдыхаем?", a: ["углекислый", "co2", "со2"], correct: "Углекислый газ (CO₂)" },
+    { q: "Кто написал «Евгения Онегина»?", a: ["пушкин"], correct: "Пушкин" },
+    { q: "Какой газ мы выдыхаем?", a: ["углекислый", "co2"], correct: "Углекислый газ (CO₂)" },
     { q: "Столица Франции?", a: ["париж"], correct: "Париж" },
     { q: "Самое большое животное на Земле?", a: ["кит", "синий кит"], correct: "Синий кит" },
     { q: "Сколько дней в високосном году?", a: ["366"], correct: "366" },
     { q: "Кто написал «Войну и мир»?", a: ["толстой", "лев"], correct: "Лев Толстой" },
-    { q: "Какой химический символ воды?", a: ["h2o", "н2о"], correct: "H₂O" },
-    { q: "Кто изобрёл лампочку?", a: ["эдисон"], correct: "Томас Эдисон" }
+    { q: "Химический символ воды?", a: ["h2o", "н2о"], correct: "H₂O" },
+    { q: "Кто изобрёл лампочку?", a: ["эдисон"], correct: "Томас Эдисон" },
+    { q: "Сколько континентов на Земле?", a: ["6", "шесть"], correct: "6" },
+    { q: "Самая длинная река?", a: ["амазонка", "нил"], correct: "Амазонка / Нил" },
+    { q: "Химический элемент O?", a: ["кислород"], correct: "Кислород" },
+    { q: "Кто первый полетел в космос?", a: ["гагарин"], correct: "Юрий Гагарин" },
+    { q: "Сколько струн у гитары?", a: ["6", "шесть"], correct: "6" }
   ],
   startQuiz() {
     this.state.active = "quiz";
     this.state.quizIndex = rnd(0, this.quizQuestions.length - 1);
     const q = this.quizQuestions[this.state.quizIndex];
-    return { text: `🧠 ВИКТОРИНА:\n\n${q.q}\n\nНапиши ответ!` };
+    return { text: "🧠 ВИКТОРИНА:\n\n" + q.q + "\n\nНапиши ответ!" };
   },
   playQuiz(text) {
     const q = this.quizQuestions[this.state.quizIndex];
@@ -137,12 +231,14 @@ const GamesModule = {
     const correct = q.a.some(a => t.includes(a));
     this.state.active = null;
     if (correct) {
-      return { text: `✅ Верно! ${q.correct}\n\nХочешь ещё вопрос? Напиши «викторина».` };
+      return { text: "✅ Верно! " + q.correct + "\n\nХочешь ещё? Напиши «викторина»." };
     }
-    return { text: `❌ Не то. Правильный ответ: ${q.correct}\n\nЕщё? Напиши «викторина».` };
+    return { text: "❌ Не то. Правильный ответ: " + q.correct + "\n\nЕщё? Напиши «викторина»." };
   },
 
-  // === КНБ ===
+  // ============================================================
+  // 3. КНБ
+  // ============================================================
   startRPS() {
     this.state.active = "rps";
     return { text: "✊✋✌️ Камень, ножницы или бумага? Напиши!" };
@@ -170,16 +266,18 @@ const GamesModule = {
     else result = "😄 Я победила!";
 
     this.state.active = null;
-    return { text: `Ты: ${emojis[user]} ${user}\nЯ: ${emojis[bot]} ${bot}\n\n${result}\n\nЕщё? Напиши «кнб».` };
+    return { text: "Ты: " + emojis[user] + " " + user + "\nЯ: " + emojis[bot] + " " + bot + "\n\n" + result + "\n\nЕщё? Напиши «кнб»." };
   },
 
-  // === ВИСЕЛИЦА ===
-  hangmanWords: ["кошка", "собака", "школа", "книга", "солнце", "цветок", "дерево", "машина", "телефон", "компьютер", "мама", "друг", "музыка", "игра", "аниме"],
+  // ============================================================
+  // 4. ВИСЕЛИЦА
+  // ============================================================
+  hangmanWords: ["кошка", "собака", "школа", "книга", "солнце", "цветок", "дерево", "машина", "телефон", "компьютер", "мама", "друг", "музыка", "игра", "аниме", "весна", "зима", "лето", "осень", "море"],
   startHangman() {
     this.state.active = "hangman";
     this.state.word = pick(this.hangmanWords);
     this.state.guessed = [];
-    return { text: `🎭 ВИСЕЛИЦА\n\nСлово: ${this.hangmanDisplay()}\n\nНапиши букву!` };
+    return { text: "🎭 ВИСЕЛИЦА\n\nСлово: " + this.hangmanDisplay() + "\n\nНапиши букву!" };
   },
   hangmanDisplay() {
     return this.state.word.split("").map(c =>
@@ -200,23 +298,25 @@ const GamesModule = {
     if (!display.includes("_")) {
       const w = this.state.word;
       this.state.active = null;
-      return { text: `🎉 Угадал! Слово: ${w}\n\nЕщё? Напиши «виселица».` };
+      return { text: "🎉 Угадал! Слово: " + w + "\n\nЕщё? Напиши «виселица»." };
     }
     if (this.state.guessed.length >= 6) {
       const w = this.state.word;
       this.state.active = null;
-      return { text: `😢 Не угадал. Слово было: ${w}\n\nЕщё? Напиши «виселица».` };
+      return { text: "😢 Не угадал. Слово было: " + w + "\n\nЕщё? Напиши «виселица»." };
     }
-    return { text: `${display}\n\nПопыток: ${this.state.guessed.length}/6` };
+    return { text: display + "\n\nПопыток: " + this.state.guessed.length + "/6" };
   },
 
-  // === ГОРОДА ===
-  cities: ["Москва", "Питер", "Казань", "Сочи", "Новосибирск", "Екатеринбург", "Владивосток", "Краснодар", "Мурманск", "Тула", "Рязань", "Самара", "Уфа", "Омск", "Томск", "Иркутск"],
+  // ============================================================
+  // 5. ГОРОДА
+  // ============================================================
+  cities: ["Москва", "Питер", "Казань", "Сочи", "Новосибирск", "Екатеринбург", "Владивосток", "Краснодар", "Мурманск", "Тула", "Рязань", "Самара", "Уфа", "Омск", "Томск", "Иркутск", "Волгоград", "Воронеж", "Пермь", "Челябинск"],
   startCities() {
     this.state.active = "cities";
     const start = pick(this.cities);
     this.state.lastCity = start;
-    return { text: `🏙 ГОРОДА!\n\nЯ начинаю: ${start}\n\nТвой город на последнюю букву «${this.lastLetter(start)}»` };
+    return { text: "🏙 ГОРОДА!\n\nЯ начинаю: " + start + "\n\nТвой город на последнюю букву «" + this.lastLetter(start) + "»" };
   },
   lastLetter(city) {
     let last = city[city.length - 1].toLowerCase();
@@ -228,7 +328,7 @@ const GamesModule = {
     if (!city) return { text: "Напиши город!" };
     const needed = this.lastLetter(this.state.lastCity);
     if (city[0].toUpperCase() !== needed) {
-      return { text: `Нужен город на «${needed}» 🤔` };
+      return { text: "Нужен город на «" + needed + "» 🤔" };
     }
     this.state.lastCity = city;
     const my = pick(this.cities.filter(c => c[0].toLowerCase() === this.lastLetter(city).toLowerCase()));
@@ -237,17 +337,105 @@ const GamesModule = {
       return { text: "🎉 Я не знаю больше городов — ты победил! Молодец!" };
     }
     this.state.lastCity = my;
-    return { text: `Мой: ${my}\n\nТвой на «${this.lastLetter(my)}»` };
+    return { text: "Мой: " + my + "\n\nТвой на «" + this.lastLetter(my) + "»" };
   },
 
-  // === КРЕСТИКИ-НОЛИКИ ===
+  // ============================================================
+  // 6. КРЕСТИКИ-НОЛИКИ
+  // ============================================================
   startTicTacToe() {
     this.state.active = "ttt";
     this.state.board = Array(9).fill("");
-    return { text: `❌⭕ КРЕСТИКИ-НОЛИКИ\n\nТы — ❌. Напиши номер клетки (1-9):\n\n1️⃣2️⃣3️⃣\n4️⃣5️⃣6️⃣\n7️⃣8️⃣9️⃣` };
+    return { text: this.tttDisplay() + "\n\nНапиши номер клетки (1-9)" };
+  },
+  tttDisplay() {
+    const b = this.state.board;
+    const cells = b.map((c, i) => c || (i + 1));
+    return "❌⭕ КРЕСТИКИ-НОЛИКИ\n\n" +
+      cells[0] + " | " + cells[1] + " | " + cells[2] + "\n" +
+      "---------\n" +
+      cells[3] + " | " + cells[4] + " | " + cells[5] + "\n" +
+      "---------\n" +
+      cells[6] + " | " + cells[7] + " | " + cells[8];
+  },
+  playTicTacToe(text) {
+    const num = parseInt(text.replace(/\D/g, ""));
+    if (isNaN(num) || num < 1 || num > 9) {
+      return { text: "Напиши номер клетки 1-9" };
+    }
+    const idx = num - 1;
+    if (this.state.board[idx]) {
+      return { text: "Эта клетка занята! Выбери другую." };
+    }
+    this.state.board[idx] = "❌";
+
+    // Проверка победы игрока
+    if (this.checkWin("❌")) {
+      const display = this.tttDisplay();
+      this.state.active = null;
+      return { text: display + "\n\n🎉 Ты победил! Молодец!" };
+    }
+
+    // Ход Ани
+    const empty = this.state.board.map((c, i) => c === "" ? i : -1).filter(i => i !== -1);
+    if (empty.length === 0) {
+      const display = this.tttDisplay();
+      this.state.active = null;
+      return { text: display + "\n\n🤝 Ничья!" };
+    }
+    // Умный ход
+    const botMove = this.smartTTTMove();
+    this.state.board[botMove] = "⭕";
+
+    if (this.checkWin("⭕")) {
+      const display = this.tttDisplay();
+      this.state.active = null;
+      return { text: display + "\n\n😄 Я победила! Ещё? Напиши «крестики»" };
+    }
+
+    const display = this.tttDisplay();
+    return { text: display + "\n\nТвой ход (1-9)" };
+  },
+  smartTTTMove() {
+    const b = this.state.board;
+    // Попробовать выиграть
+    for (let i = 0; i < 9; i++) {
+      if (!b[i]) {
+        b[i] = "⭕";
+        if (this.checkWin("⭕")) { b[i] = ""; return i; }
+        b[i] = "";
+      }
+    }
+    // Заблокировать игрока
+    for (let i = 0; i < 9; i++) {
+      if (!b[i]) {
+        b[i] = "❌";
+        if (this.checkWin("❌")) { b[i] = ""; return i; }
+        b[i] = "";
+      }
+    }
+    // Центр
+    if (!b[4]) return 4;
+    // Углы
+    const corners = [0, 2, 6, 8].filter(i => !b[i]);
+    if (corners.length) return pick(corners);
+    // Любая
+    const empty = b.map((c, i) => c === "" ? i : -1).filter(i => i !== -1);
+    return pick(empty);
+  },
+  checkWin(symbol) {
+    const b = this.state.board;
+    const wins = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6]
+    ];
+    return wins.some(line => line.every(i => b[i] === symbol));
   },
 
-  // === ПРАВДА ИЛИ ДЕЙСТВИЕ ===
+  // ============================================================
+  // 7. ПРАВДА ИЛИ ДЕЙСТВИЕ
+  // ============================================================
   truths: [
     "Какая твоя самая большая мечта?",
     "Что тебя в последний раз рассмешило до слёз?",
@@ -278,16 +466,18 @@ const GamesModule = {
     const t = text.toLowerCase();
     if (/правд/.test(t)) {
       this.state.active = null;
-      return { text: `💭 ${pick(this.truths)}` };
+      return { text: "💭 " + pick(this.truths) };
     }
     if (/действ/.test(t)) {
       this.state.active = null;
-      return { text: `🎬 ${pick(this.actions)}` };
+      return { text: "🎬 " + pick(this.actions) };
     }
     return { text: "Напиши «правда» или «действие»" };
   },
 
-  // === КТО Я? ===
+  // ============================================================
+  // 8. КТО Я?
+  // ============================================================
   whoamiList: [
     "Моцарт", "Пикассо", "Клеопатра",
     "Чебурашка", "Гарри Поттер", "Наруто", "Пикачу", "Сейлор Мун",
@@ -303,24 +493,21 @@ const GamesModule = {
     const t = text.toLowerCase();
     this.state.whoamiTries++;
 
-    // Попытка угадать
     if (/это |ты /.test(t)) {
       const guess = t.replace(/это |ты /g, "").trim();
       if (this.state.secret.toLowerCase().includes(guess) || guess.includes(this.state.secret.toLowerCase())) {
         const s = this.state.secret;
         this.state.active = null;
-        return { text: `🎉 Угадал! Это ${s}! Молодец ✨` };
+        return { text: "🎉 Угадал! Это " + s + "! Молодец ✨" };
       }
     }
 
-    // Ответы на вопросы
     if (this.state.whoamiTries > 10) {
       const s = this.state.secret;
       this.state.active = null;
-      return { text: `Хватит попыток! Это был(а) ${s}. Сыграем ещё? Напиши «сыграем в кто я».` };
+      return { text: "Хватит попыток! Это был(а) " + s + ". Сыграем ещё? Напиши «сыграем в кто я»." };
     }
 
-    // Подсказки
     const secret = this.state.secret;
     let hint = "🤔 Хм, подумай ещё!";
     if (/человек|живой/.test(t)) {
@@ -337,12 +524,117 @@ const GamesModule = {
       hint = /пушкин|шекспир/i.test(secret) ? "Да ✅" : "Нет ❌";
     }
 
-    return { text: `${hint}\nПопыток: ${this.state.whoamiTries}/10` };
+    return { text: hint + "\nПопыток: " + this.state.whoamiTries + "/10" };
   },
   isPerson(s) {
     return /моцарт|пикассо|клеопатра/i.test(s);
   },
   isAnime(s) {
     return /чебур|гарри|наруто|пикачу|сейлор|бэтмен|человек-паук|эльза|шрек/i.test(s);
-  }
-};
+  },
+
+  // ============================================================
+  // 9. ШАШКИ (упрощённо — на 3x3, «уголки»)
+  // ============================================================
+  startCheckers() {
+    this.state.active = "checkers";
+    // 3x3 доска
+    this.state.checkersBoard = [
+      ["⚫", "", "⚪"],
+      ["", "⚫", ""],
+      ["⚪", "", "⚫"]
+    ];
+    return { text: this.checkersDisplay() + "\n\nНапиши: «ход 1-1 2-2» (откуда-куда)" };
+  },
+  checkersDisplay() {
+    const b = this.state.checkersBoard;
+    return "⚫⚪ ШАШКИ (упрощённо 3x3)\n\n" +
+      "  a  b  c\n" +
+      "1 " + b[0][0] + " " + b[0][1] + " " + b[0][2] + "\n" +
+      "2 " + b[1][0] + " " + b[1][1] + " " + b[1][2] + "\n" +
+      "3 " + b[2][0] + " " + b[2][1] + " " + b[2][2] + "\n\n" +
+      "Ты — ⚫. Напиши: «ход a1 b2»";
+  },
+  playCheckers(text) {
+    const t = text.toLowerCase();
+    const match = t.match(/([a-c])([1-3])\s+([a-c])([1-3])/);
+    if (!match) {
+      return { text: "Напиши: «ход a1 b2»\n\n" + this.checkersDisplay() };
+    }
+    const fromX = match[1].charCodeAt(0) - 97;
+    const fromY = parseInt(match[2]) - 1;
+    const toX = match[3].charCodeAt(0) - 97;
+    const toY = parseInt(match[4]) - 1;
+
+    if (this.state.checkersBoard[fromY][fromX] !== "⚫") {
+      return { text: "Это не твоя шашка!" };
+    }
+    if (this.state.checkersBoard[toY][toX] !== "") {
+      return { text: "Клетка занята!" };
+    }
+
+    // Движение
+    this.state.checkersBoard[toY][toX] = "⚫";
+    this.state.checkersBoard[fromY][fromX] = "";
+
+    // Проверка победы
+    const black = this.countCheckers("⚫");
+    const white = this.countCheckers("⚪");
+    if (white === 0) {
+      this.state.active = null;
+      return { text: this.checkersDisplay() + "\n\n🎉 Ты победил!" };
+    }
+
+    // Ход Ани — случайный
+    const myMoves = this.getCheckerMoves("⚪");
+    if (myMoves.length === 0) {
+      this.state.active = null;
+      return { text: this.checkersDisplay() + "\n\n🎉 Ты победил (у меня нет ходов)!" };
+    }
+    const myMove = pick(myMoves);
+    this.state.checkersBoard[myMove.toY][myMove.toX] = "⚪";
+    this.state.checkersBoard[myMove.fromY][myMove.fromX] = "";
+
+    const black2 = this.countCheckers("⚫");
+    if (black2 === 0) {
+      this.state.active = null;
+      return { text: this.checkersDisplay() + "\n\n😄 Я победила!" };
+    }
+
+    return { text: this.checkersDisplay() + "\n\nТвой ход!" };
+  },
+  countCheckers(symbol) {
+    return this.state.checkersBoard.flat().filter(c => c === symbol).length;
+  },
+  getCheckerMoves(symbol) {
+    const b = this.state.checkersBoard;
+    const moves = [];
+    for (let y = 0; y < 3; y++) {
+      for (let x = 0; x < 3; x++) {
+        if (b[y][x] === symbol) {
+          // Проверяем соседние клетки
+          const dirs = [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[1,1],[-1,1],[1,-1]];
+          for (const [dx, dy] of dirs) {
+            const nx = x + dx, ny = y + dy;
+            if (nx >= 0 && nx < 3 && ny >= 0 && ny < 3 && b[ny][nx] === "") {
+              moves.push({ fromX: x, fromY: y, toX: nx, toY: ny });
+            }
+          }
+        }
+      }
+    }
+    return moves;
+  },
+
+  // ============================================================
+  // 10. МОРСКОЙ БОЙ (упрощённый 5x5)
+  // ============================================================
+  startBattleship() {
+    this.state.active = "battleship";
+    // Поле Ани (5x5), 3 корабля по 1 клетке + 1 по 2
+    this.state.myShips = this.generateShips();
+    this.state.myHits = [];
+    this.state.playerShips = this.generateShips();
+    this.state.playerHits = [];
+    this.state.playerShots = [];  // куда стрелял игрок
+    return

@@ -10,18 +10,25 @@ const NotesModule = {
     // ============================================================
     // ЗАПОМНИТЬ ПОСЛЕДНЕЕ ФОТО
     // ============================================================
-    if (/(запомни|сохрани|запиши|добавь).*(это\s+фото|фото\s+это|последн.*фото|фото\s+ан[ию]|ан[ию]\s+фото)/.test(t)) {
+    if (/(запомни|сохрани|запиши|добавь).*(это\s+фото|фото\s+это|последн.*фото|фото\s+ан[ию]|ан[ию]\s+фото)/.test(t)
+        || /^(запомни|сохрани)\s+это\s+фото[!?.\s]*$/i.test(t)
+        || /^(запомни|сохрани)\s+фото[!?.\s]*$/i.test(t)) {
       // Берём последнее фото из Context
       const lastPhoto = this.getLastPhoto();
       if (!lastPhoto) {
         return { text: "🤔 Я показывала фото? Напиши «покажи фото» — потом сохраню." };
       }
 
-      await this.savePhotoNote(lastPhoto);
+      const saved = await this.savePhotoNote(lastPhoto);
+      if (!saved) {
+        return { text: "📝 Это фото уже в заметках!" };
+      }
+
+      const count = await this.countPhotoNotes();
       return { text:
         "📝 Сохранила фото в заметки:\n\n" +
         "📷 " + lastPhoto + "\n\n" +
-        "Всего фото: " + (await this.countPhotoNotes())
+        "Всего фото: " + count
       };
     }
 
@@ -31,7 +38,10 @@ const NotesModule = {
     const photoMatch = text.match(/(?:запомни|сохрани|запиши)\s+(?:фото\s+)?(anya\/\d+\.(?:jpg|png|jpeg))/i);
     if (photoMatch) {
       const path = photoMatch[1];
-      await this.savePhotoNote(path);
+      const saved = await this.savePhotoNote(path);
+      if (!saved) {
+        return { text: "📝 Это фото уже в заметках!" };
+      }
       return { text: "📝 Сохранила фото: " + path };
     }
 
@@ -69,21 +79,17 @@ const NotesModule = {
         return { text: "📝 Заметок пока нет. Скажи «Запомни: ...» — и я сохраню!" };
       }
 
-      // Текстовые заметки
       const textNotes = notes.filter(n => !this.isPhotoNote(n.text));
-      // Фото-заметки
       const photoNotes = notes.filter(n => this.isPhotoNote(n.text));
 
       let out = "📝 Твои заметки (" + notes.length + "):\n\n";
 
-      // Текстовые
       if (textNotes.length > 0) {
         textNotes.forEach((n, i) => {
           out += (i + 1) + ". " + n.text + "\n";
         });
       }
 
-      // Фото
       if (photoNotes.length > 0) {
         out += "\n📷 ФОТО (" + photoNotes.length + "):\n";
         photoNotes.forEach((n, i) => {
@@ -112,7 +118,7 @@ const NotesModule = {
     // ============================================================
     if (/(сколько.*фото.*заметк|сколько.*запомнил.*фото)/.test(t)) {
       const count = await this.countPhotoNotes();
-      return { text: "📷 В заметках " + count + " " + this.plural(count, "фото", "фото", "фото") + "." };
+      return { text: "📷 В заметках " + count + " фото." };
     }
 
     return null;
@@ -152,23 +158,16 @@ const NotesModule = {
   // ============================================================
   getLastPhoto() {
     if (typeof Context === "undefined") return null;
-    // Смотрим историю за последние 3 сообщения
-    const recent = Context.history.slice(-3);
+    const recent = Context.history.slice(-5);
     for (let i = recent.length - 1; i >= 0; i--) {
       const bot = recent[i].bot || "";
-      const m = bot.match(/anya\/\d+\.(jpg|png|jpeg)/i);
+      // Новый формат [ФОТО:anya/...]
+      let m = bot.match(/\[ФОТО:(anya\/\d+\.(jpg|png|jpeg))\]/i);
+      if (m) return m[1];
+      // Старый формат
+      m = bot.match(/anya\/\d+\.(jpg|png|jpeg)/i);
       if (m) return m[0];
     }
     return null;
-  },
-
-  // ============================================================
-  // ПЛЮРАЛИЗАЦИЯ
-  // ============================================================
-  plural(n, one, few, many) {
-    const m10 = n % 10, m100 = n % 100;
-    if (m10 === 1 && m100 !== 11) return one;
-    if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few;
-    return many;
   }
 };

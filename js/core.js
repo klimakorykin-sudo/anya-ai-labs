@@ -167,7 +167,9 @@ async function loadContextFromHistory() {
       if (messages.length > 0) {
         Context.clear();
         for (const msg of messages.slice(-50)) {
-          Context.push(msg.user, msg.bot);
+          let botText = msg.bot || "";
+          if (msg.photo) botText += " [ФОТО:" + msg.photo + "]";
+          Context.push(msg.user, botText);
         }
         return;
       }
@@ -224,7 +226,7 @@ function addMsg(text, who = "bot", isHTML = false, photo = null) {
 }
 
 // ============================================================
-// ФУНКЦИЯ — добавление фото из заметок
+// ДОБАВЛЕНИЕ СПИСКА ФОТО (для заметок)
 // ============================================================
 function appendPhotoList(div, photoList) {
   if (!div || !photoList || photoList.length === 0) return;
@@ -387,7 +389,12 @@ async function handleSend(customText) {
       addMsg(parseMarkdown(reply.text), "bot", true);
     }
 
-    Context.push(text, reply.text);
+    // === СОХРАНЯЕМ В КОНТЕКСТ (с фото, если есть) ===
+    let botTextForContext = reply.text || "";
+    if (reply.photo) {
+      botTextForContext += " [ФОТО:" + reply.photo + "]";
+    }
+    Context.push(text, botTextForContext);
 
     try {
       if (typeof Chats !== "undefined") {

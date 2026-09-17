@@ -62,6 +62,7 @@ const Brain = {
     JokesModule,
     StoriesModule,
     DialoguesModule,
+    MusicModule,
 
     // === ПОЛЕЗНОЕ ===
     FactsModule,
@@ -71,6 +72,10 @@ const Brain = {
     PasswordModule,
     TimerModule,
     NotesModule,
+    DiaryModule,
+    DailyTasksModule,
+    FavoritesModule,
+    NotificationsModule,
     WeatherModule,
     RecipesModule,
     TranslatorModule,
@@ -89,7 +94,6 @@ const Brain = {
       return { text: "Напиши что-нибудь 💖" };
     }
 
-    // Нормализация
     const normalized = typeof Understand !== "undefined"
       ? Understand.understandText(trimmed)
       : trimmed.toLowerCase();
@@ -150,7 +154,7 @@ const Brain = {
       }
     }
 
-    // === Простые фразы ===
+    // Простые фразы
     const t = normalized;
 
     if (/(кто.*лучш|лучшая|идеал.*разработчик|аня.*лучш)/.test(t)) {
@@ -181,7 +185,6 @@ const Brain = {
       return { text: pick(PHRASES.bye) };
     }
 
-    // Языковые подсказки
     if (lang.hasCJK) {
       return { text: "Ого, ты написал на другом языке! 🌏 Круто! Я понимаю не всё, но рада 💫" };
     }
@@ -195,7 +198,6 @@ const Brain = {
       return { text: pick(["И тебе ✨", "Классные смайлики! 💖", "🌸", "😊"]) };
     }
 
-    // Вопрос со знаком ?
     if (normalized.endsWith("?")) {
       return { text: pick([
         "Хороший вопрос! 🤔 Давай порассуждаем вместе 💫",
@@ -206,7 +208,6 @@ const Brain = {
       ]) };
     }
 
-    // По эмоции
     if (emotion === "sadness") {
       return { text: pick(PHRASES.sad) };
     }
@@ -223,13 +224,11 @@ const Brain = {
       return { text: "💖 Как приятно! Расскажи подробнее?" };
     }
 
-    // Дефолт
     return { text: pick(PHRASES.unknown) };
   },
 
   cleanInput(text) {
     const t = text.trim();
-    // Если это ТОЛЬКО "Аня" (одно слово) — не трогаем
     if (/^(аня|ань|анюта|анечка|анютка|анюша|anya)[!?.,\s]*$/i.test(t)) {
       return t;
     }

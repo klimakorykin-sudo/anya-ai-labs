@@ -223,6 +223,39 @@ function addMsg(text, who = "bot", isHTML = false, photo = null) {
   return div;
 }
 
+// ============================================================
+// ФУНКЦИЯ — добавление фото из заметок
+// ============================================================
+function appendPhotoList(div, photoList) {
+  if (!div || !photoList || photoList.length === 0) return;
+
+  const wrap = document.createElement("div");
+  wrap.style.marginTop = "10px";
+  wrap.style.display = "flex";
+  wrap.style.flexWrap = "wrap";
+  wrap.style.gap = "8px";
+
+  photoList.forEach(path => {
+    const img = document.createElement("img");
+    img.src = path;
+    img.className = "photo";
+    img.alt = "Фото из заметок";
+    img.style.maxWidth = "180px";
+    img.style.maxHeight = "180px";
+    img.style.objectFit = "cover";
+    img.style.borderRadius = "10px";
+    img.style.border = "2px solid rgba(255,150,255,0.4)";
+    img.style.boxShadow = "0 4px 15px rgba(255,110,199,0.3)";
+    img.onerror = () => {
+      img.alt = "Фото не найдено 😢";
+      img.style.display = "none";
+    };
+    wrap.appendChild(img);
+  });
+
+  div.appendChild(wrap);
+}
+
 function formatDateLabel(dateKey) {
   const today = todayKey();
   const yesterday = (() => {
@@ -323,8 +356,9 @@ async function handleSend(customText) {
     hideTyping();
 
     // === ВЫВОД ОТВЕТА ===
+
+    // 1. График настроения
     if (reply.graphCanvas) {
-      // График настроения — прикрепляем canvas
       const div = addMsg(parseMarkdown(reply.text), "bot", true);
       if (div && reply.graphCanvas) {
         const graphWrap = document.createElement("div");
@@ -332,13 +366,24 @@ async function handleSend(customText) {
         graphWrap.appendChild(reply.graphCanvas);
         div.appendChild(graphWrap);
       }
-    } else if (reply.photo) {
+    }
+    // 2. Заметки с фото
+    else if (reply.photoList && reply.photoList.length > 0) {
+      const div = addMsg(parseMarkdown(reply.text), "bot", true);
+      appendPhotoList(div, reply.photoList);
+    }
+    // 3. Обычное фото
+    else if (reply.photo) {
       addMsg(parseMarkdown(reply.text), "bot", true, reply.photo);
       const ach = await Achievements.unlock("first_photo");
       if (ach) setTimeout(() => addMsg(ach.icon + " Достижение: " + ach.name + "!", "bot"), 1500);
-    } else if (reply.isHTML || /<pre>|<a |<code>|<b>/.test(reply.text || "")) {
+    }
+    // 4. HTML
+    else if (reply.isHTML || /<pre>|<a |<code>|<b>/.test(reply.text || "")) {
       addMsg(reply.text, "bot", true);
-    } else {
+    }
+    // 5. Просто текст
+    else {
       addMsg(parseMarkdown(reply.text), "bot", true);
     }
 

@@ -15,7 +15,7 @@ const Brain = {
     // === КРИЗИС ===
     CrisisModule,
 
-    // === МУЗЫКА (выше психолога, чтобы «музыка для грусти» не ловилось психологом) ===
+    // === МУЗЫКА (выше психолога) ===
     MusicModule,
 
     // === ПСИХОЛОГИЯ ===
@@ -34,15 +34,15 @@ const Brain = {
     EmergencyModule,
     SafetyModule,
 
-    // === ФОТО ===
-    PhotosModule,
-
-    // === ЗАМЕТКИ (до фото-комплиментов, чтобы «запомни фото» шло в заметки) ===
+    // === ЗАМЕТКИ / ДНЕВНИК (до фото, чтобы «запомни фото» не путалось) ===
     NotesModule,
     DiaryModule,
     DailyTasksModule,
     FavoritesModule,
     NotificationsModule,
+
+    // === ФОТО ===
+    PhotosModule,
 
     // === КОД ===
     CodingModule,
@@ -103,7 +103,6 @@ const Brain = {
       ? Understand.understandText(trimmed)
       : trimmed.toLowerCase();
 
-    // 0. КРИЗИС
     if (typeof CrisisModule !== "undefined" && CrisisModule.isCrisis(normalized)) {
       return CrisisModule.handle(normalized);
     }
@@ -111,7 +110,6 @@ const Brain = {
     const lang = analyzeText(normalized);
     const emotion = detectEmotion(normalized);
 
-    // Секреты
     if (typeof Secrets !== "undefined") {
       if (Secrets.isSecret(normalized)) {
         return { text: Secrets.randomSecret() };
@@ -122,7 +120,6 @@ const Brain = {
       }
     }
 
-    // Кракозябры
     if (
       lang.hasGarbage &&
       !lang.hasCyr &&
@@ -136,14 +133,12 @@ const Brain = {
       return { text: pick(PHRASES.garbage) };
     }
 
-    // Поиск в интернете
     if (typeof SearchModule !== "undefined" && SearchModule.detectSearchRequest(normalized)) {
       const query = SearchModule.extractQuery(normalized);
       const result = await SearchModule.simulateSearch(query);
       return { text: result, isHTML: true };
     }
 
-    // Прогон через модули
     for (const module of this.modules) {
       try {
         if (!module || typeof module.handle !== "function") continue;
@@ -159,7 +154,6 @@ const Brain = {
       }
     }
 
-    // Простые фразы
     const t = normalized;
 
     if (/(кто.*лучш|лучшая|идеал.*разработчик|аня.*лучш)/.test(t)) {
@@ -186,7 +180,6 @@ const Brain = {
       return { text: pick(PHRASES.thanks) };
     }
 
-    // === ПОКА — ТОЛЬКО ОТДЕЛЬНОЕ СЛОВО ===
     if (/(^|\s)пока(\s|$|[!?.,])/i.test(t) ||
         /(^|\s)bye(\s|$|[!?.,])/i.test(t) ||
         /(до\s+свид|прощай|(^|\s)бай(\s|$|[!?.,]))/i.test(t)) {

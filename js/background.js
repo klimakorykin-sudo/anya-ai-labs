@@ -1,23 +1,26 @@
 // ============================================================
-// BACKGROUND.JS — Переключение фона
-// 4 варианта: matrix, anime, white, dark
+// BACKGROUND.JS — Переключение фона (9 вариантов)
 // ============================================================
 
 const Background = {
 
   KEY: "anya_background",
-  variants: ["dark", "matrix", "anime", "white"],
+  variants: ["dark", "matrix", "anime", "white", "space", "cyberpunk", "sunset", "sakura", "ocean"],
   labels: {
     dark: "🌙 Тёмный",
     matrix: "🟢 Матрица",
     anime: "🌸 Аниме",
-    white: "⚪ Белый"
+    white: "⚪ Белый",
+    space: "🌌 Космос",
+    cyberpunk: "🌃 Киберпанк",
+    sunset: "🌅 Закат",
+    sakura: "🌸 Сакура",
+    ocean: "🌊 Океан"
   },
 
   current: "dark",
 
   init() {
-    // Загружаем сохранённый вариант
     let saved = "dark";
     try {
       saved = localStorage.getItem(this.KEY) || "dark";
@@ -27,7 +30,6 @@ const Background = {
 
     this.set(saved);
 
-    // Кнопка в шапке — переключение
     const bgBtn = document.getElementById("bgToggle");
     if (bgBtn) {
       bgBtn.addEventListener("click", () => this.openMenu());
@@ -41,13 +43,9 @@ const Background = {
 
     this.current = variant;
 
-    // Убираем все классы
     this.variants.forEach(v => document.body.classList.remove("bg-" + v));
-
-    // Добавляем новый
     document.body.classList.add("bg-" + variant);
 
-    // Сохраняем
     try {
       localStorage.setItem(this.KEY, variant);
     } catch (e) {}
@@ -76,13 +74,11 @@ const Background = {
       });
     }
 
-    // Кнопки вариантов
     document.querySelectorAll(".bg-option").forEach(btn => {
       btn.addEventListener("click", () => {
         const variant = btn.dataset.bg;
         this.set(variant);
 
-        // Обновляем активную
         document.querySelectorAll(".bg-option").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
       });
@@ -90,7 +86,6 @@ const Background = {
   }
 };
 
-// Запуск
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => Background.init());
 } else {

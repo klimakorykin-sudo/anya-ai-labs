@@ -1,15 +1,16 @@
 // ============================================================
-// BRAIN.JS — Мозг Ани
-// Порядок модулей ВАЖЕН!
+// BRAIN.JS — Мозг Ани (полная версия)
 // ============================================================
 
 const Brain = {
 
   modules: [
-    // === ЛИЧНОЕ (первыми — чтобы поймать имя, класс, разработчика) ===
+    // === ЛИЧНОЕ ===
     NameModule,
     PersonalModule,
     DeveloperModule,
+    SettingsModule,
+    ChatSearch,
 
     // === КРИЗИС (всегда рано!) ===
     CrisisModule,
@@ -18,6 +19,7 @@ const Brain = {
     PsychologistModule,
     MoodModule,
     CheckinModule,
+    BirthdayModule,
 
     // === ЗДОРОВЬЕ ===
     AnatomyTerms,
@@ -45,6 +47,11 @@ const Brain = {
     TeacherModule,
     LiteratureModule,
     GeographyModule,
+
+    // === НОВЫЕ НАУКИ ===
+    ChemistryModule,
+    PhysicsModule,
+    HistoryModule,
 
     // === ИЗВЕСТНЫЕ ЛЮДИ ===
     FamousModule,

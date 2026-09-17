@@ -1,5 +1,5 @@
 // ============================================================
-// CORE.JS — Ядро Ани (с Markdown + вопрос про возраст/класс)
+// CORE.JS — Ядро Ани (финальная версия)
 // ============================================================
 
 const chat = document.getElementById("chat");
@@ -348,6 +348,14 @@ async function handleSend(customText) {
       setTimeout(() => addMsg(`${newAch.icon} Достижение: ${newAch.name}!`, "bot"), 2000);
     }
 
+    // === ПАСХАЛКИ ===
+    if (typeof BirthdayModule !== "undefined") {
+      const milestone = await BirthdayModule.onMessage();
+      if (milestone) {
+        setTimeout(() => addMsg(parseMarkdown(milestone.text), "bot", true), 2500);
+      }
+    }
+
   } catch (e) {
     console.error("Ошибка обработки:", e);
     hideTyping();
@@ -385,7 +393,6 @@ async function sendGreeting() {
     msg += "\n\n💫 Я помню наши прошлые разговоры.";
   }
 
-  // Вопрос про возраст и класс — если ещё не сказаны
   if (!grade && !age) {
     msg += "\n\nЧтобы объяснять понятнее, скажи:\n" +
            "• Сколько тебе лет?\n" +
@@ -500,52 +507,22 @@ async function resetMemory() {
 // ПРОФИЛЬ
 // ============================================================
 async function showProfile() {
-  const name = await MemoryDB.get("name");
-  const grade = await MemoryDB.get("grade");
-  const age = await MemoryDB.get("age");
-  const facts = await MemoryDB.allFacts();
-  const notes = await MemoryDB.allNotes();
-  const stats = await Stats.getStats();
-  const topWords = await Stats.getTopWords(5);
-  const moods = await MemoryDB.allMoods();
-
-  let out = "👤 Что Аня знает обо мне:\n\n";
-  out += `📛 Имя: ${name || "(не сказал)"}\n`;
-  out += `📚 Класс: ${grade || "(не сказал)"}\n`;
-  out += `🎂 Возраст: ${age ? age + " лет" : "(не сказал)"}\n`;
-  out += `💬 Сообщений: ${stats.count}\n`;
-  out += `📅 Дней с Аней: ${stats.daysWith}\n`;
-  out += `🔥 Стрик: ${stats.streak}\n\n`;
-
-  if (topWords.length) {
-    out += `🏆 Любимые слова: ${topWords.map(w => w[0]).join(", ")}\n\n`;
+  if (typeof PersonalModule !== "undefined") {
+    addMsg(await PersonalModule.getProfile(), "bot");
   }
-
-  if (facts.length) {
-    out += `💾 Запомненные факты (${facts.length}):\n`;
-    facts.slice(-5).forEach(f => out += `• ${f.fact.slice(0, 80)}\n`);
-  }
-
-  if (notes.length) {
-    out += `\n📝 Заметки: ${notes.length}\n`;
-  }
-
-  if (moods.length) {
-    const last = moods[moods.length - 1];
-    out += `\n😊 Последнее настроение: ${MoodModule.moodNames[last.mood] || last.mood}\n`;
-  }
-
-  addMsg(out, "bot");
 }
 
 // ============================================================
-// СТАТИСТИКА / ДОСТИЖЕНИЯ
+// СТАТИСТИКА
 // ============================================================
 async function showStats() {
   const statsText = await Stats.format();
   addMsg(parseMarkdown(statsText), "bot", true);
 }
 
+// ============================================================
+// ДОСТИЖЕНИЯ
+// ============================================================
 async function showAchievements() {
   const achText = await Achievements.format();
   addMsg(parseMarkdown(achText), "bot", true);

@@ -1,5 +1,5 @@
 // ============================================================
-// CORE.JS — Ядро Ани (финальная версия)
+// CORE.JS — Ядро Ани
 // ============================================================
 
 const chat = document.getElementById("chat");
@@ -239,7 +239,7 @@ function formatDateLabel(dateKey) {
   const [y, m, d] = dateKey.split("-");
   const months = ["янв", "фев", "мар", "апр", "мая", "июн",
                   "июл", "авг", "сен", "окт", "ноя", "дек"];
-  return `${parseInt(d)} ${months[parseInt(m) - 1]} ${y}`;
+  return parseInt(d) + " " + months[parseInt(m) - 1] + " " + y;
 }
 
 // ============================================================
@@ -282,7 +282,7 @@ async function handleSend(customText) {
   if (nameMatch) {
     await MemoryDB.set("name", nameMatch[1]);
     const ach = await Achievements.unlock("tell_name");
-    if (ach) setTimeout(() => addMsg(`${ach.icon} Достижение: ${ach.name}!`, "bot"), 1500);
+    if (ach) setTimeout(() => addMsg(ach.icon + " Достижение: " + ach.name + "!", "bot"), 1500);
   }
 
   // Запомнить класс
@@ -314,7 +314,11 @@ async function handleSend(customText) {
   await new Promise(r => setTimeout(r, delay));
 
   try {
-    const cleanText = Brain.cleanInput(text);
+    // Снимаем "Аня," только если после неё ЕСТЬ текст
+    let cleanText = text;
+    if (/^аня[,\s!.]+\S/i.test(text)) {
+      cleanText = Brain.cleanInput(text);
+    }
     const reply = await Brain.think(cleanText);
 
     hideTyping();
@@ -322,7 +326,7 @@ async function handleSend(customText) {
     if (reply.photo) {
       addMsg(parseMarkdown(reply.text), "bot", true, reply.photo);
       const ach = await Achievements.unlock("first_photo");
-      if (ach) setTimeout(() => addMsg(`${ach.icon} Достижение: ${ach.name}!`, "bot"), 1500);
+      if (ach) setTimeout(() => addMsg(ach.icon + " Достижение: " + ach.name + "!", "bot"), 1500);
     } else if (reply.isHTML || /<pre>|<a |<code>|<b>/.test(reply.text || "")) {
       addMsg(reply.text, "bot", true);
     } else {
@@ -345,10 +349,10 @@ async function handleSend(customText) {
     const stats = await Stats.getStats();
     const newAch = await Achievements.checkAll(stats);
     if (newAch) {
-      setTimeout(() => addMsg(`${newAch.icon} Достижение: ${newAch.name}!`, "bot"), 2000);
+      setTimeout(() => addMsg(newAch.icon + " Достижение: " + newAch.name + "!", "bot"), 2000);
     }
 
-    // === ПАСХАЛКИ ===
+    // Пасхалки
     if (typeof BirthdayModule !== "undefined") {
       const milestone = await BirthdayModule.onMessage();
       if (milestone) {
@@ -367,7 +371,7 @@ async function handleSend(customText) {
 }
 
 // ============================================================
-// ПРИВЕТСТВИЕ + ВОПРОС ПРО ВОЗРАСТ И КЛАСС
+// ПРИВЕТСТВИЕ
 // ============================================================
 async function sendGreeting() {
   const name = await MemoryDB.get("name");
@@ -384,9 +388,9 @@ async function sendGreeting() {
 
   let msg;
   if (name) {
-    msg = `${greet}, ${name}! 💖 Рада тебя видеть!`;
+    msg = greet + ", " + name + "! 💖 Рада тебя видеть!";
   } else {
-    msg = `${greet}! ✨ Я Аня. Как тебя зовут?`;
+    msg = greet + "! ✨ Я Аня. Как тебя зовут?";
   }
 
   if (stats.count > 1) {
@@ -471,16 +475,16 @@ async function exportDialog() {
     let out = "💬 Диалог с Аней\n" + "=".repeat(40) + "\n\n";
     history.forEach(h => {
       const date = new Date(h.time).toLocaleString("ru-RU");
-      out += `[${date}]\n`;
-      if (h.user) out += `Ты: ${h.user}\n`;
-      out += `Аня: ${h.bot}\n\n`;
+      out += "[" + date + "]\n";
+      if (h.user) out += "Ты: " + h.user + "\n";
+      out += "Аня: " + h.bot + "\n\n";
     });
 
     const blob = new Blob([out], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `anya_dialog_${todayKey()}.txt`;
+    a.download = "anya_dialog_" + todayKey() + ".txt";
     a.click();
     URL.revokeObjectURL(url);
 

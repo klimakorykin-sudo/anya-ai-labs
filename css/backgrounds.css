@@ -1,5 +1,5 @@
 /* ============================================================
-   BACKGROUNDS — 4 варианта фона + кнопка и меню
+   BACKGROUNDS — 9 вариантов фона + кнопка и меню
    ============================================================ */
 
 /* По умолчанию — тёмный */
@@ -9,7 +9,7 @@ body {
 }
 
 /* ============================================================
-   МАТРИЦА — цифровой дождь
+   МАТРИЦА
    ============================================================ */
 body.bg-matrix {
   background: #000;
@@ -94,11 +94,6 @@ body.bg-matrix #input::placeholder {
   color: rgba(0, 255, 65, 0.4);
 }
 
-body.bg-matrix #input:focus {
-  border-color: #00ff41;
-  box-shadow: 0 0 25px rgba(0, 255, 65, 0.6);
-}
-
 body.bg-matrix #send,
 body.bg-matrix .mic-btn {
   background: linear-gradient(135deg, #003d00, #00aa22);
@@ -122,12 +117,13 @@ body.bg-matrix .date-divider {
 }
 
 /* ============================================================
-   АНИМЕ
+   АНИМЕ (улучшенный — мягкие облака, пастель, сакура)
    ============================================================ */
 body.bg-anime {
-  background: linear-gradient(135deg, #ffd6f0, #d6b3ff, #b3e0ff, #ffe6f0);
+  background: linear-gradient(135deg, #ffd6f0, #e6d6ff, #d6f0ff, #ffe6f0);
   background-size: 400% 400%;
-  animation: animeGradient 15s ease infinite;
+  animation: animeGradient 20s ease infinite;
+  position: relative;
 }
 
 body.bg-anime::before {
@@ -135,21 +131,23 @@ body.bg-anime::before {
   position: fixed;
   inset: 0;
   background-image:
-    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.5) 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(255, 182, 224, 0.4) 0%, transparent 35%),
-    radial-gradient(circle at 50% 90%, rgba(200, 180, 255, 0.4) 0%, transparent 45%);
+    radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.7) 0%, transparent 30%),
+    radial-gradient(circle at 75% 60%, rgba(255, 182, 224, 0.6) 0%, transparent 25%),
+    radial-gradient(circle at 40% 85%, rgba(200, 180, 255, 0.5) 0%, transparent 30%),
+    radial-gradient(circle at 90% 15%, rgba(255, 255, 255, 0.5) 0%, transparent 20%);
   pointer-events: none;
   z-index: 0;
-  animation: animeClouds 20s ease-in-out infinite alternate;
+  animation: animeClouds 25s ease-in-out infinite alternate;
 }
 
 body.bg-anime .stars {
-  opacity: 0.4;
+  opacity: 0.3;
 }
 
 body.bg-anime .app {
   background: rgba(255, 255, 255, 0.75);
-  border-color: rgba(255, 150, 220, 0.6);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 150, 220, 0.6);
   box-shadow:
     0 0 60px rgba(255, 150, 220, 0.5),
     inset 0 0 40px rgba(255, 200, 240, 0.2);
@@ -219,6 +217,477 @@ body.bg-anime .date-divider {
 @keyframes animeClouds {
   0% { transform: translate(0, 0) scale(1); }
   100% { transform: translate(30px, -20px) scale(1.1); }
+}
+
+/* ============================================================
+   КОСМОС — звёзды, планеты, тёмно-синий
+   ============================================================ */
+body.bg-space {
+  background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+}
+
+body.bg-space .stars {
+  opacity: 1;
+  animation: starTwinkle 6s ease-in-out infinite;
+}
+
+body.bg-space::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(3px 3px at 20% 30%, #fff, transparent),
+    radial-gradient(2px 2px at 60% 70%, #b3d9ff, transparent),
+    radial-gradient(4px 4px at 80% 20%, #ffb3e6, transparent),
+    radial-gradient(2px 2px at 40% 90%, #fff, transparent),
+    radial-gradient(3px 3px at 90% 60%, #b3e6ff, transparent),
+    radial-gradient(2px 2px at 15% 80%, #fff, transparent),
+    radial-gradient(4px 4px at 55% 15%, #ffd6f5, transparent),
+    radial-gradient(2px 2px at 33% 44%, #fff, transparent);
+  background-size: 200% 200%;
+  pointer-events: none;
+  z-index: 0;
+  animation: spaceStars 40s linear infinite;
+}
+
+body.bg-space .app {
+  background: rgba(10, 15, 35, 0.85);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(150, 200, 255, 0.4);
+  box-shadow:
+    0 0 60px rgba(150, 200, 255, 0.3),
+    inset 0 0 40px rgba(100, 150, 255, 0.1);
+  color: #e6f0ff;
+}
+
+body.bg-space header {
+  background: linear-gradient(90deg, #1a1f3a, #2a3a6a);
+  border-bottom: 2px solid rgba(150, 200, 255, 0.4);
+}
+
+body.bg-space h1 {
+  color: #b3d9ff;
+  text-shadow: 0 0 20px rgba(150, 200, 255, 0.8);
+}
+
+body.bg-space .sub {
+  color: #8ab8e6;
+}
+
+body.bg-space .status-dot {
+  background: #b3d9ff;
+  box-shadow: 0 0 10px #b3d9ff;
+}
+
+body.bg-space .msg.bot {
+  background: rgba(30, 40, 80, 0.6);
+  border: 1.5px solid rgba(150, 200, 255, 0.4);
+  color: #e6f0ff;
+}
+
+body.bg-space .msg.bot::before {
+  color: #b3d9ff;
+}
+
+body.bg-space .msg.user {
+  background: linear-gradient(135deg, #2a3a6a, #4a5a9a);
+  border: 1.5px solid rgba(150, 200, 255, 0.5);
+  color: #fff;
+}
+
+body.bg-space #input {
+  background: rgba(15, 20, 45, 0.8);
+  border-color: rgba(150, 200, 255, 0.5);
+  color: #e6f0ff;
+}
+
+body.bg-space #input::placeholder {
+  color: rgba(200, 220, 255, 0.4);
+}
+
+body.bg-space #input:focus {
+  border-color: #b3d9ff;
+  box-shadow: 0 0 25px rgba(150, 200, 255, 0.6);
+}
+
+body.bg-space #send,
+body.bg-space .mic-btn {
+  background: linear-gradient(135deg, #2a3a6a, #4a5a9a);
+  border-color: #b3d9ff;
+  color: #e6f0ff;
+}
+
+body.bg-space .help-btn {
+  background: linear-gradient(135deg, #2a3a6a, #1a1f3a);
+  border-color: #b3d9ff;
+}
+
+@keyframes spaceStars {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+/* ============================================================
+   КИБЕРПАНК — неон, розовый/голубой, «город»
+   ============================================================ */
+body.bg-cyberpunk {
+  background: linear-gradient(135deg, #0a001f, #1a0033, #0f3460);
+}
+
+body.bg-cyberpunk::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255, 16, 240, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(0, 255, 240, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 50% 90%, rgba(255, 16, 240, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+  animation: cyberGlow 8s ease-in-out infinite alternate;
+}
+
+body.bg-cyberpunk .stars {
+  display: none;
+}
+
+body.bg-cyberpunk .app {
+  background: rgba(10, 0, 30, 0.88);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 16, 240, 0.5);
+  box-shadow:
+    0 0 60px rgba(255, 16, 240, 0.4),
+    0 0 120px rgba(0, 255, 240, 0.2),
+    inset 0 0 40px rgba(255, 16, 240, 0.1);
+  color: #e6f0ff;
+}
+
+body.bg-cyberpunk header {
+  background: linear-gradient(90deg, #1a0033, #0f3460);
+  border-bottom: 2px solid rgba(255, 16, 240, 0.5);
+}
+
+body.bg-cyberpunk h1 {
+  color: #ff10f0;
+  text-shadow:
+    0 0 20px rgba(255, 16, 240, 0.8),
+    0 0 40px rgba(0, 255, 240, 0.5);
+}
+
+body.bg-cyberpunk .sub {
+  color: #00fff0;
+}
+
+body.bg-cyberpunk .status-dot {
+  background: #ff10f0;
+  box-shadow: 0 0 10px #ff10f0, 0 0 20px #00fff0;
+}
+
+body.bg-cyberpunk .msg.bot {
+  background: rgba(20, 0, 50, 0.7);
+  border: 1.5px solid rgba(0, 255, 240, 0.4);
+  color: #e6f0ff;
+}
+
+body.bg-cyberpunk .msg.bot::before {
+  color: #00fff0;
+}
+
+body.bg-cyberpunk .msg.user {
+  background: linear-gradient(135deg, #ff10f0, #0f3460);
+  border: 1.5px solid rgba(0, 255, 240, 0.5);
+  color: #fff;
+}
+
+body.bg-cyberpunk #input {
+  background: rgba(10, 0, 30, 0.8);
+  border-color: rgba(0, 255, 240, 0.5);
+  color: #e6f0ff;
+}
+
+body.bg-cyberpunk #input::placeholder {
+  color: rgba(0, 255, 240, 0.4);
+}
+
+body.bg-cyberpunk #input:focus {
+  border-color: #ff10f0;
+  box-shadow: 0 0 25px rgba(255, 16, 240, 0.6), 0 0 50px rgba(0, 255, 240, 0.3);
+}
+
+body.bg-cyberpunk #send,
+body.bg-cyberpunk .mic-btn {
+  background: linear-gradient(135deg, #ff10f0, #0f3460);
+  border-color: #00fff0;
+  color: #fff;
+}
+
+body.bg-cyberpunk .help-btn {
+  background: linear-gradient(135deg, #ff10f0, #0f3460);
+  border-color: #00fff0;
+}
+
+@keyframes cyberGlow {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* ============================================================
+   ЗАКАТ — оранжево-розовый
+   ============================================================ */
+body.bg-sunset {
+  background: linear-gradient(180deg, #2b1055 0%, #7597de 30%, #ff6ec7 60%, #ffb347 100%);
+}
+
+body.bg-sunset .stars {
+  opacity: 0.6;
+}
+
+body.bg-sunset .app {
+  background: rgba(40, 20, 70, 0.7);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 180, 100, 0.5);
+  box-shadow:
+    0 0 60px rgba(255, 110, 199, 0.4),
+    inset 0 0 40px rgba(255, 180, 100, 0.1);
+  color: #fff5e6;
+}
+
+body.bg-sunset header {
+  background: linear-gradient(90deg, #ff6ec7, #ffb347);
+  border-bottom: 2px solid rgba(255, 220, 150, 0.5);
+}
+
+body.bg-sunset h1 {
+  color: #fff;
+  text-shadow: 0 0 20px rgba(255, 180, 100, 0.8);
+}
+
+body.bg-sunset .sub {
+  color: #ffe6b3;
+}
+
+body.bg-sunset .status-dot {
+  background: #ffb347;
+  box-shadow: 0 0 10px #ffb347;
+}
+
+body.bg-sunset .msg.bot {
+  background: rgba(60, 30, 90, 0.6);
+  border: 1.5px solid rgba(255, 180, 100, 0.4);
+  color: #fff5e6;
+}
+
+body.bg-sunset .msg.bot::before {
+  color: #ffb347;
+}
+
+body.bg-sunset .msg.user {
+  background: linear-gradient(135deg, #ff6ec7, #ffb347);
+  color: #fff;
+}
+
+body.bg-sunset #input {
+  background: rgba(40, 20, 70, 0.7);
+  border-color: rgba(255, 180, 100, 0.5);
+  color: #fff5e6;
+}
+
+body.bg-sunset #input::placeholder {
+  color: rgba(255, 230, 180, 0.4);
+}
+
+body.bg-sunset #input:focus {
+  border-color: #ffb347;
+  box-shadow: 0 0 25px rgba(255, 180, 100, 0.6);
+}
+
+body.bg-sunset #send,
+body.bg-sunset .mic-btn {
+  background: linear-gradient(135deg, #ff6ec7, #ffb347);
+  border-color: #ffe6b3;
+  color: #fff;
+}
+
+body.bg-sunset .help-btn {
+  background: linear-gradient(135deg, #ff6ec7, #ffb347);
+  border-color: #ffe6b3;
+}
+
+/* ============================================================
+   САКУРА — розовые лепестки
+   ============================================================ */
+body.bg-sakura {
+  background: linear-gradient(135deg, #ffe6f0, #ffd6e6, #ffcce0);
+  position: relative;
+}
+
+body.bg-sakura::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(255, 200, 220, 0.6) 0%, transparent 20%),
+    radial-gradient(circle at 80% 70%, rgba(255, 180, 210, 0.5) 0%, transparent 25%),
+    radial-gradient(circle at 50% 90%, rgba(255, 200, 220, 0.4) 0%, transparent 30%);
+  pointer-events: none;
+  z-index: 0;
+  animation: sakuraPulse 10s ease-in-out infinite alternate;
+}
+
+body.bg-sakura .stars {
+  display: none;
+}
+
+body.bg-sakura .app {
+  background: rgba(255, 240, 250, 0.8);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 150, 200, 0.6);
+  box-shadow:
+    0 0 60px rgba(255, 150, 200, 0.5),
+    inset 0 0 40px rgba(255, 200, 230, 0.2);
+  color: #5a2b3c;
+}
+
+body.bg-sakura header {
+  background: linear-gradient(90deg, #ff9ec7, #ffb3d9);
+  border-bottom: 2px solid rgba(255, 180, 210, 0.7);
+}
+
+body.bg-sakura h1 {
+  color: #fff;
+  text-shadow: 0 0 15px rgba(255, 150, 200, 0.8);
+}
+
+body.bg-sakura .sub {
+  color: #fff;
+}
+
+body.bg-sakura .msg.bot {
+  background: rgba(255, 240, 250, 0.9);
+  border: 1.5px solid rgba(255, 150, 200, 0.5);
+  color: #5a2b3c;
+}
+
+body.bg-sakura .msg.bot::before {
+  color: #d63a7b;
+}
+
+body.bg-sakura .msg.user {
+  background: linear-gradient(135deg, #ff9ec7, #ffb3d9);
+  color: #fff;
+}
+
+body.bg-sakura #input {
+  background: rgba(255, 240, 250, 0.9);
+  border-color: rgba(255, 150, 200, 0.6);
+  color: #5a2b3c;
+}
+
+body.bg-sakura #input::placeholder {
+  color: rgba(90, 43, 60, 0.4);
+}
+
+body.bg-sakura .input-row,
+body.bg-sakura .chats-panel,
+body.bg-sakura .menu {
+  color: #5a2b3c;
+}
+
+body.bg-sakura .chat {
+  color: #5a2b3c;
+}
+
+body.bg-sakura .date-divider {
+  color: #8a4a6c;
+  background: rgba(255, 240, 250, 0.6);
+}
+
+@keyframes sakuraPulse {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* ============================================================
+   ОКЕАН — синие волны
+   ============================================================ */
+body.bg-ocean {
+  background: linear-gradient(180deg, #003366 0%, #1b5c8a 50%, #6ecfff 100%);
+  position: relative;
+}
+
+body.bg-ocean .stars {
+  opacity: 0.4;
+}
+
+body.bg-ocean .app {
+  background: rgba(0, 30, 60, 0.85);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(110, 207, 255, 0.5);
+  box-shadow:
+    0 0 60px rgba(110, 207, 255, 0.4),
+    inset 0 0 40px rgba(110, 207, 255, 0.1);
+  color: #e6f5ff;
+}
+
+body.bg-ocean header {
+  background: linear-gradient(90deg, #003366, #1b5c8a);
+  border-bottom: 2px solid rgba(110, 207, 255, 0.5);
+}
+
+body.bg-ocean h1 {
+  color: #b3e6ff;
+  text-shadow: 0 0 20px rgba(110, 207, 255, 0.8);
+}
+
+body.bg-ocean .sub {
+  color: #6ecfff;
+}
+
+body.bg-ocean .status-dot {
+  background: #6ecfff;
+  box-shadow: 0 0 10px #6ecfff;
+}
+
+body.bg-ocean .msg.bot {
+  background: rgba(0, 40, 80, 0.6);
+  border: 1.5px solid rgba(110, 207, 255, 0.4);
+  color: #e6f5ff;
+}
+
+body.bg-ocean .msg.bot::before {
+  color: #6ecfff;
+}
+
+body.bg-ocean .msg.user {
+  background: linear-gradient(135deg, #1b5c8a, #6ecfff);
+  color: #fff;
+}
+
+body.bg-ocean #input {
+  background: rgba(0, 30, 60, 0.8);
+  border-color: rgba(110, 207, 255, 0.5);
+  color: #e6f5ff;
+}
+
+body.bg-ocean #input::placeholder {
+  color: rgba(180, 230, 255, 0.4);
+}
+
+body.bg-ocean #input:focus {
+  border-color: #6ecfff;
+  box-shadow: 0 0 25px rgba(110, 207, 255, 0.6);
+}
+
+body.bg-ocean #send,
+body.bg-ocean .mic-btn {
+  background: linear-gradient(135deg, #1b5c8a, #6ecfff);
+  border-color: #b3e6ff;
+  color: #fff;
+}
+
+body.bg-ocean .help-btn {
+  background: linear-gradient(135deg, #1b5c8a, #6ecfff);
+  border-color: #b3e6ff;
 }
 
 /* ============================================================
@@ -312,9 +781,8 @@ body.bg-dark {
 }
 
 /* ============================================================
-   КНОПКА ФОНА — слева, рядом с ☰
+   КНОПКА ФОНА
    ============================================================ */
-
 .bg-toggle {
   width: 38px;
   height: 38px;
@@ -340,10 +808,9 @@ body.bg-dark {
 /* ============================================================
    МЕНЮ ВЫБОРА ФОНА
    ============================================================ */
-
 .bg-options {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   margin-bottom: 18px;
 }
@@ -353,15 +820,15 @@ body.bg-dark {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  padding: 12px;
-  border-radius: 16px;
+  padding: 10px;
+  border-radius: 14px;
   border: 2px solid rgba(255, 150, 255, 0.3);
   background: rgba(255, 255, 255, 0.05);
   color: #fff;
   cursor: pointer;
   transition: all 0.2s;
   font-family: inherit;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -379,8 +846,8 @@ body.bg-dark {
 
 .bg-preview {
   width: 100%;
-  height: 60px;
-  border-radius: 10px;
+  height: 50px;
+  border-radius: 8px;
   border: 1.5px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -390,19 +857,35 @@ body.bg-dark {
 
 .matrix-preview {
   background: #000;
-  background-image: repeating-linear-gradient(
-    90deg,
-    #00ff41 0 2px,
-    transparent 2px 8px
-  );
+  background-image: repeating-linear-gradient(90deg, #00ff41 0 2px, transparent 2px 8px);
 }
 
 .anime-preview {
-  background: linear-gradient(135deg, #ffd6f0, #d6b3ff, #b3e0ff);
+  background: linear-gradient(135deg, #ffd6f0, #e6d6ff, #d6f0ff);
 }
 
 .white-preview {
   background: linear-gradient(135deg, #f5f5f7, #ffffff, #eef0f5);
+}
+
+.space-preview {
+  background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+}
+
+.cyberpunk-preview {
+  background: linear-gradient(135deg, #0a001f, #1a0033, #0f3460);
+}
+
+.sunset-preview {
+  background: linear-gradient(180deg, #2b1055, #7597de, #ff6ec7, #ffb347);
+}
+
+.sakura-preview {
+  background: linear-gradient(135deg, #ffe6f0, #ffd6e6, #ffcce0);
+}
+
+.ocean-preview {
+  background: linear-gradient(180deg, #003366, #1b5c8a, #6ecfff);
 }
 
 @media (max-width: 600px) {
@@ -417,6 +900,6 @@ body.bg-dark {
   }
 
   .bg-preview {
-    height: 50px;
+    height: 40px;
   }
 }

@@ -637,4 +637,227 @@ const GamesModule = {
     this.state.playerShips = this.generateShips();
     this.state.playerHits = [];
     this.state.playerShots = [];  // куда стрелял игрок
-    return
+    return { text: this.battleshipDisplay() + "\n\nСтреляй: «а3», «б4» (буква-цифра)" };
+  },
+  generateShips() {
+    const ships = [];
+    while (ships.length < 4) {
+      const x = rnd(0, 4);
+      const y = rnd(0, 4);
+      const key = x + "-" + y;
+      if (!ships.includes(key)) ships.push(key);
+    }
+    return ships;
+  },
+  battleshipDisplay() {
+    const letters = ["а", "б", "в", "г", "д"];
+    let out = "🚢 МОРСКОЙ БОЙ (5x5)\n\n";
+    out += "   " + letters.join(" ") + "\n";
+    for (let y = 0; y < 5; y++) {
+      out += (y + 1) + "  ";
+      for (let x = 0; x < 5; x++) {
+        const key = x + "-" + y;
+        if (this.state.playerShots.includes(key)) {
+          if (this.state.myShips.includes(key)) out += "💥 ";
+          else out += "• ";
+        } else {
+          out += "~ ";
+        }
+      }
+      out += "\n";
+    }
+    return out;
+  },
+  playBattleship(text) {
+    const t = text.toLowerCase();
+    const letters = { "а": 0, "б": 1, "в": 2, "г": 3, "д": 4 };
+    const match = t.match(/([а-д])\s*([1-5])/);
+    if (!match) {
+      return { text: "Напиши координаты: «а3», «б4»\n\n" + this.battleshipDisplay() };
+    }
+    const x = letters[match[1]];
+    const y = parseInt(match[2]) - 1;
+    const key = x + "-" + y;
+
+    if (this.state.playerShots.includes(key)) {
+      return { text: "Ты уже стрелял сюда!\n\n" + this.battleshipDisplay() };
+    }
+    this.state.playerShots.push(key);
+
+    let hit = false;
+    if (this.state.myShips.includes(key)) {
+      hit = true;
+      this.state.myHits.push(key);
+    }
+
+    // Проверка победы игрока
+    if (this.state.myHits.length === this.state.myShips.length) {
+      this.state.active = null;
+      return { text: this.battleshipDisplay() + "\n\n🎉 Ты потопил все мои корабли! Победа!" };
+    }
+
+    // Ход Ани — стреляет случайно в поле игрока
+    const avail = [];
+    for (let i = 0; i < 5; i++) {
+      for (let j = 0; j < 5; j++) {
+        const k = i + "-" + j;
+        if (!this.state.playerHits.includes(k)) avail.push(k);
+      }
+    }
+    const myShot = pick(avail);
+    let myHit = false;
+    if (this.state.playerShips.includes(myShot)) {
+      myHit = true;
+      this.state.playerHits.push(myShot);
+    }
+
+    let status = hit ? "💥 Попал!" : "💦 Мимо!";
+    status += "\nЯ стреляю в " + myShot.split("-").map((v, i) => i === 0 ? "абвгд"[v] : (parseInt(v) + 1)).join("") + ": ";
+    status += myHit ? "💥 Попала!" : "💦 Мимо!";
+
+    return { text: this.battleshipDisplay() + "\n\n" + status };
+  },
+
+  // ============================================================
+  // 11. 21 (ОЧКО)
+  // ============================================================
+  startBlackjack() {
+    this.state.active = "blackjack";
+    this.state.playerCards = [this.drawCard(), this.drawCard()];
+    this.state.myCards = [this.drawCard(), this.drawCard()];
+    return { text: this.blackjackDisplay() + "\n\n«ещё» — взять карту, «хватит» — остановиться" };
+  },
+  drawCard() {
+    const cards = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11]; // 11 = туз
+    return pick(cards);
+  },
+  sumCards(cards) {
+    let sum = cards.reduce((a, b) => a + b, 0);
+    // Если туз = 11 и перебор, считаем как 1
+    let aces = cards.filter(c => c === 11).length;
+    while (sum > 21 && aces > 0) {
+      sum -= 10;
+      aces--;
+    }
+    return sum;
+  },
+  blackjackDisplay() {
+    return "🃏 21 (ОЧКО)\n\n" +
+      "Твои карты: " + this.state.playerCards.join(", ") + " (сумма: " + this.sumCards(this.state.playerCards) + ")\n" +
+      "Мои карты: " + this.state.myCards[0] + ", ?";
+  },
+  playBlackjack(text) {
+    const t = text.toLowerCase();
+
+    if (/(ещё|еще|взять|дай)/.test(t)) {
+      this.state.playerCards.push(this.drawCard());
+      const sum = this.sumCards(this.state.playerCards);
+
+      if (sum > 21) {
+        this.state.active = null;
+        return { text: "🃏 Перебор! " + sum + ". Я победила! 😄\n\nЕщё? Напиши «21»" };
+      }
+
+      return { text: this.blackjackDisplay() + "\n\n(сумма: " + sum + ")\n\n«ещё» или «хватит»" };
+    }
+
+    if (/(хватит|стоп|достаточно|пас)/.test(t)) {
+      // Аня добирает до 17+
+      while (this.sumCards(this.state.myCards) < 17) {
+        this.state.myCards.push(this.drawCard());
+      }
+
+      const mySum = this.sumCards(this.state.myCards);
+      const playerSum = this.sumCards(this.state.playerCards);
+
+      let result;
+      if (mySum > 21) result = "🎉 У меня перебор! Ты победил!";
+      else if (playerSum > mySum) result = "🎉 Ты победил!";
+      else if (playerSum === mySum) result = "🤝 Ничья!";
+      else result = "😄 Я победила!";
+
+      this.state.active = null;
+      return { text:
+        "🃏 ИТОГ:\n\n" +
+        "Твои карты: " + this.state.playerCards.join(", ") + " = " + playerSum + "\n" +
+        "Мои карты: " + this.state.myCards.join(", ") + " = " + mySum + "\n\n" +
+        result + "\n\nЕщё? Напиши «21»"
+      };
+    }
+
+    return { text: "Напиши «ещё» или «хватит»" };
+  },
+
+  // ============================================================
+  // 12. УГАДАЙ СЛОВО (Wordle-стиль)
+  // ============================================================
+  wordleWords: ["КОШКА", "СОБАКА", "ШКОЛА", "КНИГА", "СОЛНЦЕ", "ЦВЕТОК", "ДЕРЕВО", "МАШИНА", "ТЕЛЕФОН", "ДРУГ", "МУЗЫКА", "ИГРА", "АНИМЕ", "ВЕСНА", "ЗИМА", "ЛЕТО", "ОСЕНЬ", "МОРЕ", "ПЕСНЯ", "ЗВЕЗДА", "СВЕТ", "ДОЖДЬ"],
+  startWordle() {
+    this.state.active = "wordle";
+    this.state.wordleWord = pick(this.wordleWords);
+    this.state.wordleTries = [];
+    return { text: "📝 УГАДАЙ СЛОВО\n\nЯ загадала слово из " + this.state.wordleWord.length + " букв.\n\nПравила:\n✅ — буква на месте\n🟨 — буква есть, но не там\n⬜ — буквы нет\n\nПиши слово!" };
+  },
+  playWordle(text) {
+    const t = text.trim().toUpperCase();
+    if (!/^[А-ЯЁ]+$/.test(t)) {
+      return { text: "Напиши слово русскими буквами!" };
+    }
+    if (t.length !== this.state.wordleWord.length) {
+      return { text: "Слово должно быть из " + this.state.wordleWord.length + " букв!" };
+    }
+
+    // Проверка
+    const result = this.checkWordle(t);
+    this.state.wordleTries.push({ word: t, result });
+
+    if (t === this.state.wordleWord) {
+      const word = this.state.wordleWord;
+      const tries = this.state.wordleTries.length;
+      this.state.active = null;
+      return { text: this.wordleDisplay() + "\n\n🎉 Угадал! Слово: " + word + "\nПопыток: " + tries + "\n\nЕщё? Напиши «угадай слово»" };
+    }
+
+    if (this.state.wordleTries.length >= 6) {
+      const word = this.state.wordleWord;
+      this.state.active = null;
+      return { text: this.wordleDisplay() + "\n\n😢 Не угадал. Слово было: " + word + "\n\nЕщё? Напиши «угадай слово»" };
+    }
+
+    return { text: this.wordleDisplay() + "\n\nПопыток: " + this.state.wordleTries.length + "/6" };
+  },
+  checkWordle(word) {
+    const target = this.state.wordleWord;
+    const result = [];
+    const used = Array(target.length).fill(false);
+
+    // Сначала правильные
+    for (let i = 0; i < word.length; i++) {
+      if (word[i] === target[i]) {
+        result[i] = "✅";
+        used[i] = true;
+      }
+    }
+    // Потом остальные
+    for (let i = 0; i < word.length; i++) {
+      if (!result[i]) {
+        for (let j = 0; j < target.length; j++) {
+          if (!used[j] && word[i] === target[j]) {
+            result[i] = "🟨";
+            used[j] = true;
+            break;
+          }
+        }
+        if (!result[i]) result[i] = "⬜";
+      }
+    }
+    return result;
+  },
+  wordleDisplay() {
+    let out = "📝 УГАДАЙ СЛОВО\n\n";
+    this.state.wordleTries.forEach(t => {
+      out += t.word.split("").map((c, i) => c + t.result[i]).join(" ") + "\n";
+    });
+    return out;
+  }
+};

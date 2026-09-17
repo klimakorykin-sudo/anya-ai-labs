@@ -1,5 +1,5 @@
 // ============================================================
-// BRAIN.JS — Мозг Ани (полная версия)
+// BRAIN.JS — Мозг Ани
 // ============================================================
 
 const Brain = {
@@ -12,7 +12,7 @@ const Brain = {
     SettingsModule,
     ChatSearch,
 
-    // === КРИЗИС (всегда рано!) ===
+    // === КРИЗИС ===
     CrisisModule,
 
     // === ПСИХОЛОГИЯ ===
@@ -94,7 +94,7 @@ const Brain = {
       ? Understand.understandText(trimmed)
       : trimmed.toLowerCase();
 
-    // 0. КРИЗИС — перехватывает всё
+    // 0. КРИЗИС
     if (typeof CrisisModule !== "undefined" && CrisisModule.isCrisis(normalized)) {
       return CrisisModule.handle(normalized);
     }
@@ -150,7 +150,7 @@ const Brain = {
       }
     }
 
-    // === Простые фразы (если модули не ответили) ===
+    // === Простые фразы ===
     const t = normalized;
 
     if (/(кто.*лучш|лучшая|идеал.*разработчик|аня.*лучш)/.test(t)) {
@@ -228,7 +228,12 @@ const Brain = {
   },
 
   cleanInput(text) {
-    return text
+    const t = text.trim();
+    // Если это ТОЛЬКО "Аня" (одно слово) — не трогаем
+    if (/^(аня|ань|анюта|анечка|анютка|анюша|anya)[!?.,\s]*$/i.test(t)) {
+      return t;
+    }
+    return t
       .replace(/^аня[,\s!.]*/i, "")
       .replace(/^ань[,\s!.]*/i, "")
       .trim();

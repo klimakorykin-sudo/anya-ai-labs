@@ -314,7 +314,6 @@ async function handleSend(customText) {
   await new Promise(r => setTimeout(r, delay));
 
   try {
-    // Снимаем "Аня," только если после неё ЕСТЬ текст
     let cleanText = text;
     if (/^аня[,\s!.]+\S/i.test(text)) {
       cleanText = Brain.cleanInput(text);
@@ -323,7 +322,17 @@ async function handleSend(customText) {
 
     hideTyping();
 
-    if (reply.photo) {
+    // === ВЫВОД ОТВЕТА ===
+    if (reply.graphCanvas) {
+      // График настроения — прикрепляем canvas
+      const div = addMsg(parseMarkdown(reply.text), "bot", true);
+      if (div && reply.graphCanvas) {
+        const graphWrap = document.createElement("div");
+        graphWrap.style.marginTop = "12px";
+        graphWrap.appendChild(reply.graphCanvas);
+        div.appendChild(graphWrap);
+      }
+    } else if (reply.photo) {
       addMsg(parseMarkdown(reply.text), "bot", true, reply.photo);
       const ach = await Achievements.unlock("first_photo");
       if (ach) setTimeout(() => addMsg(ach.icon + " Достижение: " + ach.name + "!", "bot"), 1500);

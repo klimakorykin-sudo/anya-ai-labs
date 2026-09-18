@@ -15,7 +15,7 @@ const Brain = {
     // === КРИЗИС ===
     CrisisModule,
 
-    // === МУЗЫКА (выше психолога) ===
+    // === МУЗЫКА ===
     MusicModule,
 
     // === ПСИХОЛОГИЯ ===
@@ -34,7 +34,7 @@ const Brain = {
     EmergencyModule,
     SafetyModule,
 
-    // === ЗАМЕТКИ / ДНЕВНИК (до фото) ===
+    // === ЗАМЕТКИ / ДНЕВНИК ===
     NotesModule,
     DiaryModule,
     DailyTasksModule,
@@ -59,7 +59,7 @@ const Brain = {
     LiteratureModule,
     GeographyModule,
 
-    // === НОВЫЕ НАУКИ ===
+    // === НАУКИ ===
     ChemistryModule,
     PhysicsModule,
     HistoryModule,
@@ -69,6 +69,13 @@ const Brain = {
     PhilosophyModule,
     EconomicsModule,
     LawModule,
+
+    // === СПРАВОЧНИКИ ===
+    DictionaryRuModule,
+    StressModule,
+    PhraseologismsModule,
+    ProverbsModule,
+    QuotesBigModule,
 
     // === ИЗВЕСТНЫЕ ЛЮДИ ===
     FamousModule,

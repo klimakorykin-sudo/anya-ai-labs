@@ -1,5 +1,6 @@
 /* ============================================================
-   BACKGROUNDS — 9 вариантов фона с эффектами
+   BACKGROUNDS — Часть 1
+   Основные фоны: тёмный, матрица, аниме, белый
    ============================================================ */
 
 /* По умолчанию — тёмный */
@@ -9,42 +10,137 @@ body {
 }
 
 /* ============================================================
-   MATRIX
+   ТЁМНЫЙ
    ============================================================ */
-body.bg-matrix { background: #000; }
-body.bg-matrix::before { display: none; }
-body.bg-matrix .stars { display: none; }
+body.bg-dark {
+  background: linear-gradient(135deg, #1a0033, #2d1b4e, #4a1e5c);
+}
+
+body.bg-dark .app {
+  background: rgba(30, 10, 50, 0.78);
+  border-color: rgba(255, 150, 255, 0.35);
+}
+
+/* ============================================================
+   МАТРИЦА — цифровой дождь
+   ============================================================ */
+body.bg-matrix {
+  background: #000;
+}
+
+body.bg-matrix::before {
+  display: none;
+}
+
+#matrixCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  display: none;
+}
+
+body.bg-matrix #matrixCanvas {
+  display: block;
+}
+
+body.bg-matrix .stars {
+  display: none;
+}
+
 body.bg-matrix .app {
   background: rgba(0, 15, 0, 0.88);
   border-color: rgba(0, 255, 65, 0.5);
-  box-shadow: 0 0 60px rgba(0, 255, 65, 0.4), inset 0 0 40px rgba(0, 255, 65, 0.1);
-  position: relative; z-index: 2;
+  box-shadow:
+    0 0 60px rgba(0, 255, 65, 0.4),
+    inset 0 0 40px rgba(0, 255, 65, 0.1);
+  position: relative;
+  z-index: 2;
 }
-body.bg-matrix header { background: linear-gradient(90deg, #001a00, #003d00); border-bottom: 2px solid rgba(0, 255, 65, 0.5); }
-body.bg-matrix h1 { color: #00ff41; text-shadow: 0 0 20px rgba(0, 255, 65, 0.8); background: none; -webkit-text-fill-color: #00ff41; }
-body.bg-matrix .sub { color: #00cc33; }
-body.bg-matrix .status-dot { background: #00ff41; box-shadow: 0 0 10px #00ff41; }
-body.bg-matrix .msg.bot { background: rgba(0, 40, 0, 0.6); border: 1.5px solid rgba(0, 255, 65, 0.4); color: #00ff41; }
-body.bg-matrix .msg.bot::before { color: #00cc33; }
-body.bg-matrix .msg.user { background: linear-gradient(135deg, #003d00, #005500); border: 1.5px solid rgba(0, 255, 65, 0.5); color: #00ff41; }
-body.bg-matrix #input { background: rgba(0, 20, 0, 0.8); border-color: rgba(0, 255, 65, 0.5); color: #00ff41; }
-body.bg-matrix #input::placeholder { color: rgba(0, 255, 65, 0.4); }
-body.bg-matrix #send, body.bg-matrix .mic-btn { background: linear-gradient(135deg, #003d00, #00aa22); border-color: #00ff41; color: #00ff41; }
-body.bg-matrix .help-btn { background: linear-gradient(135deg, #003d00, #006600); border-color: #00ff41; }
-body.bg-matrix .date-divider { color: #00cc33; background: rgba(0, 40, 0, 0.5); }
 
-#matrixCanvas {
-  position: fixed; inset: 0; width: 100%; height: 100%;
-  z-index: 1; pointer-events: none; display: none;
+body.bg-matrix header {
+  background: linear-gradient(90deg, #001a00, #003d00);
+  border-bottom: 2px solid rgba(0, 255, 65, 0.5);
 }
-body.bg-matrix #matrixCanvas { display: block; }
+
+body.bg-matrix h1 {
+  color: #00ff41;
+  text-shadow: 0 0 20px rgba(0, 255, 65, 0.8);
+  background: none;
+  -webkit-text-fill-color: #00ff41;
+}
+
+body.bg-matrix .sub {
+  color: #00cc33;
+}
+
+body.bg-matrix .status-dot {
+  background: #00ff41;
+  box-shadow: 0 0 10px #00ff41;
+}
+
+body.bg-matrix .msg.bot {
+  background: rgba(0, 40, 0, 0.6);
+  border: 1.5px solid rgba(0, 255, 65, 0.4);
+  color: #00ff41;
+}
+
+body.bg-matrix .msg.bot::before {
+  color: #00cc33;
+}
+
+body.bg-matrix .msg.user {
+  background: linear-gradient(135deg, #003d00, #005500);
+  border: 1.5px solid rgba(0, 255, 65, 0.5);
+  color: #00ff41;
+}
+
+body.bg-matrix #input {
+  background: rgba(0, 20, 0, 0.8);
+  border-color: rgba(0, 255, 65, 0.5);
+  color: #00ff41;
+}
+
+body.bg-matrix #input::placeholder {
+  color: rgba(0, 255, 65, 0.4);
+}
+
+body.bg-matrix #input:focus {
+  border-color: #00ff41;
+  box-shadow: 0 0 25px rgba(0, 255, 65, 0.6);
+}
+
+body.bg-matrix #send,
+body.bg-matrix .mic-btn {
+  background: linear-gradient(135deg, #003d00, #00aa22);
+  border-color: #00ff41;
+  color: #00ff41;
+}
+
+body.bg-matrix .help-btn {
+  background: linear-gradient(135deg, #003d00, #006600);
+  border-color: #00ff41;
+}
+
+body.bg-matrix .chat::-webkit-scrollbar-thumb {
+  background: #00ff41;
+  box-shadow: 0 0 8px #00ff41;
+}
+
+body.bg-matrix .date-divider {
+  color: #00cc33;
+  background: rgba(0, 40, 0, 0.5);
+}
 
 /* ============================================================
-   ANIME — мягкие облака + пастель (БЕЗ сакуры)
+   АНИМЕ — мягкие облака + пастель
    ============================================================ */
 body.bg-anime {
   background: linear-gradient(180deg, #d6f0ff 0%, #e6d6ff 50%, #ffd6f0 100%);
 }
+
 body.bg-anime::before {
   content: "";
   position: fixed;
@@ -58,25 +154,74 @@ body.bg-anime::before {
   z-index: 0;
   animation: animeCloudMove 30s linear infinite;
 }
-body.bg-anime .stars { display: none; }
+
+body.bg-anime .stars {
+  display: none;
+}
+
 body.bg-anime .app {
   background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(20px);
   border: 2px solid rgba(255, 150, 220, 0.6);
-  box-shadow: 0 0 60px rgba(255, 150, 220, 0.5), inset 0 0 40px rgba(255, 200, 240, 0.2);
+  box-shadow:
+    0 0 60px rgba(255, 150, 220, 0.5),
+    inset 0 0 40px rgba(255, 200, 240, 0.2);
   color: #5a2b5c;
 }
-body.bg-anime header { background: linear-gradient(90deg, #ff9edb, #c9a7ff); border-bottom: 2px solid rgba(255, 200, 240, 0.7); }
-body.bg-anime h1 { color: #fff; text-shadow: 0 0 15px rgba(255, 110, 199, 0.8); }
-body.bg-anime .sub { color: #fff; }
-body.bg-anime .msg.bot { background: rgba(255, 255, 255, 0.9); border: 1.5px solid rgba(255, 150, 220, 0.5); color: #4a1e5c; }
-body.bg-anime .msg.bot::before { color: #d63a9b; }
-body.bg-anime .msg.user { background: linear-gradient(135deg, #ff9edb, #a06bff); color: #fff; }
-body.bg-anime #input { background: rgba(255, 255, 255, 0.9); border-color: rgba(255, 150, 220, 0.6); color: #4a1e5c; }
-body.bg-anime #input::placeholder { color: rgba(90, 43, 92, 0.4); }
-body.bg-anime .input-row, body.bg-anime .chats-panel, body.bg-anime .menu { color: #4a1e5c; }
-body.bg-anime .chat { color: #4a1e5c; }
-body.bg-anime .date-divider { color: #8a4a8c; background: rgba(255, 255, 255, 0.6); }
+
+body.bg-anime header {
+  background: linear-gradient(90deg, #ff9edb, #c9a7ff);
+  border-bottom: 2px solid rgba(255, 200, 240, 0.7);
+}
+
+body.bg-anime h1 {
+  color: #fff;
+  text-shadow: 0 0 15px rgba(255, 110, 199, 0.8);
+}
+
+body.bg-anime .sub {
+  color: #fff;
+}
+
+body.bg-anime .msg.bot {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1.5px solid rgba(255, 150, 220, 0.5);
+  color: #4a1e5c;
+}
+
+body.bg-anime .msg.bot::before {
+  color: #d63a9b;
+}
+
+body.bg-anime .msg.user {
+  background: linear-gradient(135deg, #ff9edb, #a06bff);
+  color: #fff;
+}
+
+body.bg-anime #input {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 150, 220, 0.6);
+  color: #4a1e5c;
+}
+
+body.bg-anime #input::placeholder {
+  color: rgba(90, 43, 92, 0.4);
+}
+
+body.bg-anime .input-row,
+body.bg-anime .chats-panel,
+body.bg-anime .menu {
+  color: #4a1e5c;
+}
+
+body.bg-anime .chat {
+  color: #4a1e5c;
+}
+
+body.bg-anime .date-divider {
+  color: #8a4a8c;
+  background: rgba(255, 255, 255, 0.6);
+}
 
 @keyframes animeCloudMove {
   0% { transform: translateX(0); }
@@ -84,69 +229,110 @@ body.bg-anime .date-divider { color: #8a4a8c; background: rgba(255, 255, 255, 0.
 }
 
 /* ============================================================
-   SAKURA — розовое небо + падающие лепестки (JS)
+   БЕЛЫЙ
    ============================================================ */
-body.bg-sakura {
-  background: linear-gradient(180deg, #ffb3d9 0%, #ffcce0 40%, #ffe6f0 100%);
-  overflow: hidden;
+body.bg-white {
+  background: linear-gradient(135deg, #f5f5f7, #ffffff, #eef0f5);
 }
-body.bg-sakura::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image:
-    radial-gradient(circle at 85% 15%, rgba(255, 230, 150, 0.6) 0%, transparent 15%),
-    radial-gradient(circle at 10% 80%, rgba(255, 200, 220, 0.7) 0%, transparent 20%);
-  pointer-events: none;
-  z-index: 0;
-}
-body.bg-sakura .stars { display: none; }
-body.bg-sakura .app {
-  background: rgba(255, 240, 250, 0.82);
-  backdrop-filter: blur(20px);
-  border: 2px solid rgba(255, 150, 200, 0.6);
-  box-shadow: 0 0 60px rgba(255, 150, 200, 0.5), inset 0 0 40px rgba(255, 200, 230, 0.2);
-  color: #5a2b3c;
-}
-body.bg-sakura header { background: linear-gradient(90deg, #ff7eb3, #ff9ec7); border-bottom: 2px solid rgba(255, 180, 210, 0.7); }
-body.bg-sakura h1 { color: #fff; text-shadow: 0 0 15px rgba(255, 100, 160, 0.8); }
-body.bg-sakura .sub { color: #fff; }
-body.bg-sakura .msg.bot { background: rgba(255, 240, 250, 0.9); border: 1.5px solid rgba(255, 150, 200, 0.5); color: #5a2b3c; }
-body.bg-sakura .msg.bot::before { color: #d63a7b; }
-body.bg-sakura .msg.user { background: linear-gradient(135deg, #ff7eb3, #ffb3d9); color: #fff; }
-body.bg-sakura #input { background: rgba(255, 240, 250, 0.9); border-color: rgba(255, 150, 200, 0.6); color: #5a2b3c; }
-body.bg-sakura #input::placeholder { color: rgba(90, 43, 60, 0.4); }
-body.bg-sakura .input-row, body.bg-sakura .chats-panel, body.bg-sakura .menu { color: #5a2b3c; }
-body.bg-sakura .chat { color: #5a2b3c; }
-body.bg-sakura .date-divider { color: #8a4a6c; background: rgba(255, 240, 250, 0.6); }
 
-/* Canvas для лепестков сакуры */
-#sakuraCanvas {
-  position: fixed; inset: 0; width: 100%; height: 100%;
-  z-index: 1; pointer-events: none; display: none;
+body.bg-white .stars {
+  display: none;
 }
-body.bg-sakura #sakuraCanvas { display: block; }
 
+body.bg-white .app {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(200, 200, 220, 0.6);
+  box-shadow:
+    0 0 40px rgba(160, 107, 255, 0.2),
+    0 0 80px rgba(200, 200, 240, 0.2);
+  color: #2a2a3e;
+}
+
+body.bg-white header {
+  background: linear-gradient(90deg, #f0f0f5, #e8e8f0);
+  border-bottom: 1.5px solid rgba(200, 200, 220, 0.5);
+}
+
+body.bg-white h1 {
+  background: linear-gradient(90deg, #a06bff, #ff6ec7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+
+body.bg-white .sub {
+  color: #6a6a7e;
+}
+
+body.bg-white .msg.bot {
+  background: #f0f0f5;
+  border: 1.5px solid rgba(200, 200, 220, 0.4);
+  color: #2a2a3e;
+}
+
+body.bg-white .msg.bot::before {
+  color: #a06bff;
+}
+
+body.bg-white .msg.user {
+  background: linear-gradient(135deg, #ff9edb, #a06bff);
+  color: #fff;
+}
+
+body.bg-white #input {
+  background: #fff;
+  border-color: rgba(200, 200, 220, 0.6);
+  color: #2a2a3e;
+}
+
+body.bg-white #input::placeholder {
+  color: rgba(42, 42, 62, 0.4);
+}
+
+body.bg-white .input-row {
+  background: rgba(245, 245, 250, 0.9);
+  border-top: 1px solid rgba(200, 200, 220, 0.3);
+}
+
+body.bg-white .chat {
+  color: #2a2a3e;
+}
+
+body.bg-white .date-divider {
+  color: #6a6a7e;
+  background: rgba(240, 240, 250, 0.8);
+}
+
+body.bg-white .menu,
+body.bg-white .chats-panel {
+  background: linear-gradient(135deg, #ffffff, #f0f0f5);
+  color: #2a2a3e;
+  border-color: rgba(200, 200, 220, 0.5);
+}
 /* ============================================================
-   SPACE — звёзды + планеты + туманность
+   КОСМОС — звёзды с движением + туманности
    ============================================================ */
 body.bg-space {
   background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+  overflow: hidden;
 }
+
 body.bg-space::before {
   content: "";
   position: fixed;
   inset: 0;
   background-image:
-    radial-gradient(circle at 70% 20%, rgba(100, 150, 255, 0.3) 0%, transparent 25%),
-    radial-gradient(circle at 20% 70%, rgba(200, 100, 255, 0.2) 0%, transparent 30%),
-    radial-gradient(circle at 50% 50%, rgba(255, 200, 150, 0.1) 0%, transparent 40%),
-    radial-gradient(circle at 88% 65%, rgba(255, 180, 200, 0.25) 0%, transparent 15%),
-    radial-gradient(circle at 15% 25%, rgba(150, 200, 255, 0.2) 0%, transparent 20%);
+    radial-gradient(circle at 70% 20%, rgba(100, 150, 255, 0.35) 0%, transparent 25%),
+    radial-gradient(circle at 20% 70%, rgba(200, 100, 255, 0.25) 0%, transparent 30%),
+    radial-gradient(circle at 50% 50%, rgba(255, 200, 150, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 88% 65%, rgba(255, 180, 200, 0.3) 0%, transparent 15%),
+    radial-gradient(circle at 15% 25%, rgba(150, 200, 255, 0.25) 0%, transparent 20%);
   pointer-events: none;
   z-index: 0;
   animation: spaceGlow 8s ease-in-out infinite alternate;
 }
+
 body.bg-space .stars {
   opacity: 1;
   background-image:
@@ -160,29 +346,100 @@ body.bg-space .stars {
     radial-gradient(2px 2px at 33% 44%, #fff, transparent),
     radial-gradient(1px 1px at 75% 45%, #fff, transparent),
     radial-gradient(2px 2px at 10% 55%, #b3d9ff, transparent),
-    radial-gradient(1px 1px at 45% 25%, #fff, transparent);
+    radial-gradient(1px 1px at 45% 25%, #fff, transparent),
+    radial-gradient(2px 2px at 68% 88%, #ffb3e6, transparent),
+    radial-gradient(1px 1px at 92% 40%, #fff, transparent);
   background-size: 300% 300%;
-  animation: starTwinkle 6s ease-in-out infinite, spaceStarsMove 60s linear infinite;
+  animation:
+    starTwinkle 6s ease-in-out infinite,
+    spaceStarsMove 60s linear infinite;
 }
+
 body.bg-space .app {
   background: rgba(10, 15, 35, 0.85);
   backdrop-filter: blur(20px);
   border: 2px solid rgba(150, 200, 255, 0.4);
-  box-shadow: 0 0 60px rgba(150, 200, 255, 0.3), inset 0 0 40px rgba(100, 150, 255, 0.1);
+  box-shadow:
+    0 0 60px rgba(150, 200, 255, 0.3),
+    inset 0 0 40px rgba(100, 150, 255, 0.1);
+  color: #e6f0ff;
+  position: relative;
+  z-index: 2;
+}
+
+body.bg-space header {
+  background: linear-gradient(90deg, #1a1f3a, #2a3a6a);
+  border-bottom: 2px solid rgba(150, 200, 255, 0.4);
+}
+
+body.bg-space h1 {
+  color: #b3d9ff;
+  text-shadow: 0 0 20px rgba(150, 200, 255, 0.8);
+}
+
+body.bg-space .sub {
+  color: #8ab8e6;
+}
+
+body.bg-space .status-dot {
+  background: #b3d9ff;
+  box-shadow: 0 0 10px #b3d9ff;
+}
+
+body.bg-space .msg.bot {
+  background: rgba(30, 40, 80, 0.6);
+  border: 1.5px solid rgba(150, 200, 255, 0.4);
   color: #e6f0ff;
 }
-body.bg-space header { background: linear-gradient(90deg, #1a1f3a, #2a3a6a); border-bottom: 2px solid rgba(150, 200, 255, 0.4); }
-body.bg-space h1 { color: #b3d9ff; text-shadow: 0 0 20px rgba(150, 200, 255, 0.8); }
-body.bg-space .sub { color: #8ab8e6; }
-body.bg-space .status-dot { background: #b3d9ff; box-shadow: 0 0 10px #b3d9ff; }
-body.bg-space .msg.bot { background: rgba(30, 40, 80, 0.6); border: 1.5px solid rgba(150, 200, 255, 0.4); color: #e6f0ff; }
-body.bg-space .msg.bot::before { color: #b3d9ff; }
-body.bg-space .msg.user { background: linear-gradient(135deg, #2a3a6a, #4a5a9a); border: 1.5px solid rgba(150, 200, 255, 0.5); color: #fff; }
-body.bg-space #input { background: rgba(15, 20, 45, 0.8); border-color: rgba(150, 200, 255, 0.5); color: #e6f0ff; }
-body.bg-space #input::placeholder { color: rgba(200, 220, 255, 0.4); }
-body.bg-space #input:focus { border-color: #b3d9ff; box-shadow: 0 0 25px rgba(150, 200, 255, 0.6); }
-body.bg-space #send, body.bg-space .mic-btn { background: linear-gradient(135deg, #2a3a6a, #4a5a9a); border-color: #b3d9ff; color: #e6f0ff; }
-body.bg-space .help-btn { background: linear-gradient(135deg, #2a3a6a, #1a1f3a); border-color: #b3d9ff; }
+
+body.bg-space .msg.bot::before {
+  color: #b3d9ff;
+}
+
+body.bg-space .msg.user {
+  background: linear-gradient(135deg, #2a3a6a, #4a5a9a);
+  border: 1.5px solid rgba(150, 200, 255, 0.5);
+  color: #fff;
+}
+
+body.bg-space #input {
+  background: rgba(15, 20, 45, 0.8);
+  border-color: rgba(150, 200, 255, 0.5);
+  color: #e6f0ff;
+}
+
+body.bg-space #input::placeholder {
+  color: rgba(200, 220, 255, 0.4);
+}
+
+body.bg-space #input:focus {
+  border-color: #b3d9ff;
+  box-shadow: 0 0 25px rgba(150, 200, 255, 0.6);
+}
+
+body.bg-space #send,
+body.bg-space .mic-btn {
+  background: linear-gradient(135deg, #2a3a6a, #4a5a9a);
+  border-color: #b3d9ff;
+  color: #e6f0ff;
+}
+
+body.bg-space .help-btn {
+  background: linear-gradient(135deg, #2a3a6a, #1a1f3a);
+  border-color: #b3d9ff;
+}
+
+body.bg-space .date-divider {
+  color: #b3d9ff;
+  background: rgba(30, 40, 80, 0.5);
+}
+
+body.bg-space .menu,
+body.bg-space .chats-panel {
+  background: linear-gradient(135deg, #0f1a3a, #1a2f5a);
+  color: #e6f0ff;
+  border-color: rgba(150, 200, 255, 0.4);
+}
 
 @keyframes spaceGlow {
   0% { opacity: 0.7; }
@@ -195,11 +452,12 @@ body.bg-space .help-btn { background: linear-gradient(135deg, #2a3a6a, #1a1f3a);
 }
 
 /* ============================================================
-   CYBERPUNK — неон + дождь
+   КИБЕРПАНК — неон + сетка
    ============================================================ */
 body.bg-cyberpunk {
   background: linear-gradient(135deg, #0a001f, #1a0033, #0f3460);
 }
+
 body.bg-cyberpunk::before {
   content: "";
   position: fixed;
@@ -213,44 +471,121 @@ body.bg-cyberpunk::before {
   background-size: 100px 100px, 100px 100px, 100% 100%, 100% 100%, 100% 100%;
   pointer-events: none;
   z-index: 0;
-  animation: cyberGridMove 4s linear infinite, cyberGlow 4s ease-in-out infinite alternate;
+  animation:
+    cyberGridMove 4s linear infinite,
+    cyberGlow 4s ease-in-out infinite alternate;
 }
-body.bg-cyberpunk .stars { display: none; }
+
+body.bg-cyberpunk .stars {
+  display: none;
+}
+
 body.bg-cyberpunk .app {
   background: rgba(10, 0, 30, 0.88);
   backdrop-filter: blur(20px);
   border: 2px solid rgba(255, 16, 240, 0.5);
-  box-shadow: 0 0 60px rgba(255, 16, 240, 0.4), 0 0 120px rgba(0, 255, 240, 0.2), inset 0 0 40px rgba(255, 16, 240, 0.1);
+  box-shadow:
+    0 0 60px rgba(255, 16, 240, 0.4),
+    0 0 120px rgba(0, 255, 240, 0.2),
+    inset 0 0 40px rgba(255, 16, 240, 0.1);
+  color: #e6f0ff;
+  position: relative;
+  z-index: 2;
+}
+
+body.bg-cyberpunk header {
+  background: linear-gradient(90deg, #1a0033, #0f3460);
+  border-bottom: 2px solid rgba(255, 16, 240, 0.5);
+}
+
+body.bg-cyberpunk h1 {
+  color: #ff10f0;
+  text-shadow:
+    0 0 20px rgba(255, 16, 240, 0.8),
+    0 0 40px rgba(0, 255, 240, 0.5);
+}
+
+body.bg-cyberpunk .sub {
+  color: #00fff0;
+}
+
+body.bg-cyberpunk .status-dot {
+  background: #ff10f0;
+  box-shadow: 0 0 10px #ff10f0, 0 0 20px #00fff0;
+}
+
+body.bg-cyberpunk .msg.bot {
+  background: rgba(20, 0, 50, 0.7);
+  border: 1.5px solid rgba(0, 255, 240, 0.4);
   color: #e6f0ff;
 }
-body.bg-cyberpunk header { background: linear-gradient(90deg, #1a0033, #0f3460); border-bottom: 2px solid rgba(255, 16, 240, 0.5); }
-body.bg-cyberpunk h1 { color: #ff10f0; text-shadow: 0 0 20px rgba(255, 16, 240, 0.8), 0 0 40px rgba(0, 255, 240, 0.5); }
-body.bg-cyberpunk .sub { color: #00fff0; }
-body.bg-cyberpunk .status-dot { background: #ff10f0; box-shadow: 0 0 10px #ff10f0, 0 0 20px #00fff0; }
-body.bg-cyberpunk .msg.bot { background: rgba(20, 0, 50, 0.7); border: 1.5px solid rgba(0, 255, 240, 0.4); color: #e6f0ff; }
-body.bg-cyberpunk .msg.bot::before { color: #00fff0; }
-body.bg-cyberpunk .msg.user { background: linear-gradient(135deg, #ff10f0, #0f3460); border: 1.5px solid rgba(0, 255, 240, 0.5); color: #fff; }
-body.bg-cyberpunk #input { background: rgba(10, 0, 30, 0.8); border-color: rgba(0, 255, 240, 0.5); color: #e6f0ff; }
-body.bg-cyberpunk #input::placeholder { color: rgba(0, 255, 240, 0.4); }
-body.bg-cyberpunk #input:focus { border-color: #ff10f0; box-shadow: 0 0 25px rgba(255, 16, 240, 0.6), 0 0 50px rgba(0, 255, 240, 0.3); }
-body.bg-cyberpunk #send, body.bg-cyberpunk .mic-btn { background: linear-gradient(135deg, #ff10f0, #0f3460); border-color: #00fff0; color: #fff; }
-body.bg-cyberpunk .help-btn { background: linear-gradient(135deg, #ff10f0, #0f3460); border-color: #00fff0; }
+
+body.bg-cyberpunk .msg.bot::before {
+  color: #00fff0;
+}
+
+body.bg-cyberpunk .msg.user {
+  background: linear-gradient(135deg, #ff10f0, #0f3460);
+  border: 1.5px solid rgba(0, 255, 240, 0.5);
+  color: #fff;
+}
+
+body.bg-cyberpunk #input {
+  background: rgba(10, 0, 30, 0.8);
+  border-color: rgba(0, 255, 240, 0.5);
+  color: #e6f0ff;
+}
+
+body.bg-cyberpunk #input::placeholder {
+  color: rgba(0, 255, 240, 0.4);
+}
+
+body.bg-cyberpunk #input:focus {
+  border-color: #ff10f0;
+  box-shadow: 0 0 25px rgba(255, 16, 240, 0.6), 0 0 50px rgba(0, 255, 240, 0.3);
+}
+
+body.bg-cyberpunk #send,
+body.bg-cyberpunk .mic-btn {
+  background: linear-gradient(135deg, #ff10f0, #0f3460);
+  border-color: #00fff0;
+  color: #fff;
+}
+
+body.bg-cyberpunk .help-btn {
+  background: linear-gradient(135deg, #ff10f0, #0f3460);
+  border-color: #00fff0;
+}
+
+body.bg-cyberpunk .date-divider {
+  color: #00fff0;
+  background: rgba(20, 0, 50, 0.5);
+}
+
+body.bg-cyberpunk .menu,
+body.bg-cyberpunk .chats-panel {
+  background: linear-gradient(135deg, #0a001f, #0f3460);
+  color: #e6f0ff;
+  border-color: rgba(255, 16, 240, 0.5);
+}
 
 @keyframes cyberGridMove {
   0% { background-position: 0 0, 0 0, 0 0, 0 0, 0 0; }
   100% { background-position: 100px 100px, -100px 100px, 0 0, 0 0, 0 0; }
 }
+
 @keyframes cyberGlow {
   0% { opacity: 0.7; }
   100% { opacity: 1; }
 }
 
 /* ============================================================
-   SUNSET — солнце + облака
+   ЗАКАТ — солнце + облака
    ============================================================ */
 body.bg-sunset {
   background: linear-gradient(180deg, #2b1055 0%, #7597de 30%, #ff6ec7 60%, #ffb347 100%);
 }
+
 body.bg-sunset::before {
   content: "";
   position: fixed;
@@ -264,38 +599,219 @@ body.bg-sunset::before {
   z-index: 0;
   animation: sunsetSunMove 8s ease-in-out infinite alternate;
 }
-body.bg-sunset .stars { display: none; }
+
+body.bg-sunset .stars {
+  display: none;
+}
+
 body.bg-sunset .app {
   background: rgba(40, 20, 70, 0.7);
   backdrop-filter: blur(20px);
   border: 2px solid rgba(255, 180, 100, 0.5);
-  box-shadow: 0 0 60px rgba(255, 110, 199, 0.4), inset 0 0 40px rgba(255, 180, 100, 0.1);
+  box-shadow:
+    0 0 60px rgba(255, 110, 199, 0.4),
+    inset 0 0 40px rgba(255, 180, 100, 0.1);
+  color: #fff5e6;
+  position: relative;
+  z-index: 2;
+}
+
+body.bg-sunset header {
+  background: linear-gradient(90deg, #ff6ec7, #ffb347);
+  border-bottom: 2px solid rgba(255, 220, 150, 0.5);
+}
+
+body.bg-sunset h1 {
+  color: #fff;
+  text-shadow: 0 0 20px rgba(255, 180, 100, 0.8);
+}
+
+body.bg-sunset .sub {
+  color: #ffe6b3;
+}
+
+body.bg-sunset .status-dot {
+  background: #ffb347;
+  box-shadow: 0 0 10px #ffb347;
+}
+
+body.bg-sunset .msg.bot {
+  background: rgba(60, 30, 90, 0.6);
+  border: 1.5px solid rgba(255, 180, 100, 0.4);
   color: #fff5e6;
 }
-body.bg-sunset header { background: linear-gradient(90deg, #ff6ec7, #ffb347); border-bottom: 2px solid rgba(255, 220, 150, 0.5); }
-body.bg-sunset h1 { color: #fff; text-shadow: 0 0 20px rgba(255, 180, 100, 0.8); }
-body.bg-sunset .sub { color: #ffe6b3; }
-body.bg-sunset .status-dot { background: #ffb347; box-shadow: 0 0 10px #ffb347; }
-body.bg-sunset .msg.bot { background: rgba(60, 30, 90, 0.6); border: 1.5px solid rgba(255, 180, 100, 0.4); color: #fff5e6; }
-body.bg-sunset .msg.bot::before { color: #ffb347; }
-body.bg-sunset .msg.user { background: linear-gradient(135deg, #ff6ec7, #ffb347); color: #fff; }
-body.bg-sunset #input { background: rgba(40, 20, 70, 0.7); border-color: rgba(255, 180, 100, 0.5); color: #fff5e6; }
-body.bg-sunset #input::placeholder { color: rgba(255, 230, 180, 0.4); }
-body.bg-sunset #input:focus { border-color: #ffb347; box-shadow: 0 0 25px rgba(255, 180, 100, 0.6); }
-body.bg-sunset #send, body.bg-sunset .mic-btn { background: linear-gradient(135deg, #ff6ec7, #ffb347); border-color: #ffe6b3; color: #fff; }
-body.bg-sunset .help-btn { background: linear-gradient(135deg, #ff6ec7, #ffb347); border-color: #ffe6b3; }
+
+body.bg-sunset .msg.bot::before {
+  color: #ffb347;
+}
+
+body.bg-sunset .msg.user {
+  background: linear-gradient(135deg, #ff6ec7, #ffb347);
+  color: #fff;
+}
+
+body.bg-sunset #input {
+  background: rgba(40, 20, 70, 0.7);
+  border-color: rgba(255, 180, 100, 0.5);
+  color: #fff5e6;
+}
+
+body.bg-sunset #input::placeholder {
+  color: rgba(255, 230, 180, 0.4);
+}
+
+body.bg-sunset #input:focus {
+  border-color: #ffb347;
+  box-shadow: 0 0 25px rgba(255, 180, 100, 0.6);
+}
+
+body.bg-sunset #send,
+body.bg-sunset .mic-btn {
+  background: linear-gradient(135deg, #ff6ec7, #ffb347);
+  border-color: #ffe6b3;
+  color: #fff;
+}
+
+body.bg-sunset .help-btn {
+  background: linear-gradient(135deg, #ff6ec7, #ffb347);
+  border-color: #ffe6b3;
+}
+
+body.bg-sunset .date-divider {
+  color: #ffb347;
+  background: rgba(60, 30, 90, 0.5);
+}
+
+body.bg-sunset .menu,
+body.bg-sunset .chats-panel {
+  background: linear-gradient(135deg, #2b1055, #ff6ec7);
+  color: #fff5e6;
+  border-color: rgba(255, 180, 100, 0.5);
+}
 
 @keyframes sunsetSunMove {
   0% { background-position: 0 0, 0 0, 0 0, 0 0; }
   100% { background-position: 0 10px, 20px 0, -20px 0, 10px 0; }
 }
+/* ============================================================
+   САКУРА — розовые лепестки с движением
+   ============================================================ */
+body.bg-sakura {
+  background: linear-gradient(180deg, #ffb3d9 0%, #ffcce0 40%, #ffe6f0 100%);
+  overflow: hidden;
+}
+
+body.bg-sakura::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 85% 15%, rgba(255, 230, 150, 0.6) 0%, transparent 15%),
+    radial-gradient(circle at 10% 80%, rgba(255, 200, 220, 0.7) 0%, transparent 20%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body.bg-sakura .stars {
+  display: none;
+}
+
+body.bg-sakura .app {
+  background: rgba(255, 240, 250, 0.82);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 150, 200, 0.6);
+  box-shadow:
+    0 0 60px rgba(255, 150, 200, 0.5),
+    inset 0 0 40px rgba(255, 200, 230, 0.2);
+  color: #5a2b3c;
+  position: relative;
+  z-index: 2;
+}
+
+body.bg-sakura header {
+  background: linear-gradient(90deg, #ff7eb3, #ff9ec7);
+  border-bottom: 2px solid rgba(255, 180, 210, 0.7);
+}
+
+body.bg-sakura h1 {
+  color: #fff;
+  text-shadow: 0 0 15px rgba(255, 100, 160, 0.8);
+}
+
+body.bg-sakura .sub {
+  color: #fff;
+}
+
+body.bg-sakura .msg.bot {
+  background: rgba(255, 240, 250, 0.9);
+  border: 1.5px solid rgba(255, 150, 200, 0.5);
+  color: #5a2b3c;
+}
+
+body.bg-sakura .msg.bot::before {
+  color: #d63a7b;
+}
+
+body.bg-sakura .msg.user {
+  background: linear-gradient(135deg, #ff7eb3, #ffb3d9);
+  color: #fff;
+}
+
+body.bg-sakura #input {
+  background: rgba(255, 240, 250, 0.9);
+  border-color: rgba(255, 150, 200, 0.6);
+  color: #5a2b3c;
+}
+
+body.bg-sakura #input::placeholder {
+  color: rgba(90, 43, 60, 0.4);
+}
+
+body.bg-sakura .input-row,
+body.bg-sakura .chats-panel,
+body.bg-sakura .menu {
+  color: #5a2b3c;
+}
+
+body.bg-sakura .chat {
+  color: #5a2b3c;
+}
+
+body.bg-sakura .date-divider {
+  color: #8a4a6c;
+  background: rgba(255, 240, 250, 0.6);
+}
+
+body.bg-sakura .menu,
+body.bg-sakura .chats-panel {
+  background: linear-gradient(135deg, #ffe6f0, #ffb3d9);
+  color: #5a2b3c;
+  border-color: rgba(255, 150, 200, 0.5);
+}
+
+/* Canvas для лепестков сакуры */
+#sakuraCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  display: none;
+}
+
+body.bg-sakura #sakuraCanvas {
+  display: block;
+}
 
 /* ============================================================
-   OCEAN — волны + пузырьки
+   ОКЕАН — пузырьки + волна
    ============================================================ */
 body.bg-ocean {
   background: linear-gradient(180deg, #003366 0%, #1b5c8a 40%, #6ecfff 100%);
+  overflow: hidden;
 }
+
 body.bg-ocean::before {
   content: "";
   position: fixed;
@@ -314,26 +830,95 @@ body.bg-ocean::before {
   z-index: 0;
   animation: oceanBubbles 20s linear infinite;
 }
-body.bg-ocean .stars { display: none; }
+
+body.bg-ocean .stars {
+  display: none;
+}
+
 body.bg-ocean .app {
   background: rgba(0, 30, 60, 0.85);
   backdrop-filter: blur(20px);
   border: 2px solid rgba(110, 207, 255, 0.5);
-  box-shadow: 0 0 60px rgba(110, 207, 255, 0.4), inset 0 0 40px rgba(110, 207, 255, 0.1);
+  box-shadow:
+    0 0 60px rgba(110, 207, 255, 0.4),
+    inset 0 0 40px rgba(110, 207, 255, 0.1);
+  color: #e6f5ff;
+  position: relative;
+  z-index: 2;
+}
+
+body.bg-ocean header {
+  background: linear-gradient(90deg, #003366, #1b5c8a);
+  border-bottom: 2px solid rgba(110, 207, 255, 0.5);
+}
+
+body.bg-ocean h1 {
+  color: #b3e6ff;
+  text-shadow: 0 0 20px rgba(110, 207, 255, 0.8);
+}
+
+body.bg-ocean .sub {
+  color: #6ecfff;
+}
+
+body.bg-ocean .status-dot {
+  background: #6ecfff;
+  box-shadow: 0 0 10px #6ecfff;
+}
+
+body.bg-ocean .msg.bot {
+  background: rgba(0, 40, 80, 0.6);
+  border: 1.5px solid rgba(110, 207, 255, 0.4);
   color: #e6f5ff;
 }
-body.bg-ocean header { background: linear-gradient(90deg, #003366, #1b5c8a); border-bottom: 2px solid rgba(110, 207, 255, 0.5); }
-body.bg-ocean h1 { color: #b3e6ff; text-shadow: 0 0 20px rgba(110, 207, 255, 0.8); }
-body.bg-ocean .sub { color: #6ecfff; }
-body.bg-ocean .status-dot { background: #6ecfff; box-shadow: 0 0 10px #6ecfff; }
-body.bg-ocean .msg.bot { background: rgba(0, 40, 80, 0.6); border: 1.5px solid rgba(110, 207, 255, 0.4); color: #e6f5ff; }
-body.bg-ocean .msg.bot::before { color: #6ecfff; }
-body.bg-ocean .msg.user { background: linear-gradient(135deg, #1b5c8a, #6ecfff); color: #fff; }
-body.bg-ocean #input { background: rgba(0, 30, 60, 0.8); border-color: rgba(110, 207, 255, 0.5); color: #e6f5ff; }
-body.bg-ocean #input::placeholder { color: rgba(180, 230, 255, 0.4); }
-body.bg-ocean #input:focus { border-color: #6ecfff; box-shadow: 0 0 25px rgba(110, 207, 255, 0.6); }
-body.bg-ocean #send, body.bg-ocean .mic-btn { background: linear-gradient(135deg, #1b5c8a, #6ecfff); border-color: #b3e6ff; color: #fff; }
-body.bg-ocean .help-btn { background: linear-gradient(135deg, #1b5c8a, #6ecfff); border-color: #b3e6ff; }
+
+body.bg-ocean .msg.bot::before {
+  color: #6ecfff;
+}
+
+body.bg-ocean .msg.user {
+  background: linear-gradient(135deg, #1b5c8a, #6ecfff);
+  color: #fff;
+}
+
+body.bg-ocean #input {
+  background: rgba(0, 30, 60, 0.8);
+  border-color: rgba(110, 207, 255, 0.5);
+  color: #e6f5ff;
+}
+
+body.bg-ocean #input::placeholder {
+  color: rgba(180, 230, 255, 0.4);
+}
+
+body.bg-ocean #input:focus {
+  border-color: #6ecfff;
+  box-shadow: 0 0 25px rgba(110, 207, 255, 0.6);
+}
+
+body.bg-ocean #send,
+body.bg-ocean .mic-btn {
+  background: linear-gradient(135deg, #1b5c8a, #6ecfff);
+  border-color: #b3e6ff;
+  color: #fff;
+}
+
+body.bg-ocean .help-btn {
+  background: linear-gradient(135deg, #1b5c8a, #6ecfff);
+  border-color: #b3e6ff;
+}
+
+body.bg-ocean .date-divider {
+  color: #6ecfff;
+  background: rgba(0, 40, 80, 0.5);
+}
+
+body.bg-ocean .menu,
+body.bg-ocean .chats-panel {
+  background: linear-gradient(135deg, #003366, #1b5c8a);
+  color: #e6f5ff;
+  border-color: rgba(110, 207, 255, 0.5);
+}
 
 @keyframes oceanBubbles {
   0% { background-position: 0% 0%; }
@@ -341,71 +926,376 @@ body.bg-ocean .help-btn { background: linear-gradient(135deg, #1b5c8a, #6ecfff);
 }
 
 /* ============================================================
-   WHITE
+   ЛЕС — зелёный, спокойный
    ============================================================ */
-body.bg-white { background: linear-gradient(135deg, #f5f5f7, #ffffff, #eef0f5); }
-body.bg-white .stars { display: none; }
-body.bg-white .app { background: rgba(255, 255, 255, 0.95); border-color: rgba(200, 200, 220, 0.6); box-shadow: 0 0 40px rgba(160, 107, 255, 0.2); color: #2a2a3e; }
-body.bg-white header { background: linear-gradient(90deg, #f0f0f5, #e8e8f0); border-bottom: 1.5px solid rgba(200, 200, 220, 0.5); }
-body.bg-white h1 { background: linear-gradient(90deg, #a06bff, #ff6ec7); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: none; }
-body.bg-white .sub { color: #6a6a7e; }
-body.bg-white .msg.bot { background: #f0f0f5; border: 1.5px solid rgba(200, 200, 220, 0.4); color: #2a2a3e; }
-body.bg-white .msg.bot::before { color: #a06bff; }
-body.bg-white .msg.user { background: linear-gradient(135deg, #ff9edb, #a06bff); color: #fff; }
-body.bg-white #input { background: #fff; border-color: rgba(200, 200, 220, 0.6); color: #2a2a3e; }
-body.bg-white #input::placeholder { color: rgba(42, 42, 62, 0.4); }
-body.bg-white .input-row { background: rgba(245, 245, 250, 0.9); border-top: 1px solid rgba(200, 200, 220, 0.3); }
-body.bg-white .chat { color: #2a2a3e; }
-body.bg-white .date-divider { color: #6a6a7e; background: rgba(240, 240, 250, 0.8); }
-body.bg-white .menu, body.bg-white .chats-panel { background: linear-gradient(135deg, #ffffff, #f0f0f5); color: #2a2a3e; border-color: rgba(200, 200, 220, 0.5); }
+body.bg-forest {
+  background: linear-gradient(180deg, #1a3a1a 0%, #2d5a2d 50%, #4a7a3a 100%);
+}
+
+body.bg-forest::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(150, 220, 100, 0.15) 0%, transparent 30%),
+    radial-gradient(circle at 80% 60%, rgba(200, 255, 150, 0.1) 0%, transparent 35%),
+    radial-gradient(circle at 50% 90%, rgba(100, 180, 80, 0.2) 0%, transparent 40%),
+    radial-gradient(circle at 10% 80%, rgba(150, 220, 100, 0.12) 0%, transparent 25%);
+  pointer-events: none;
+  z-index: 0;
+  animation: forestGlow 10s ease-in-out infinite alternate;
+}
+
+body.bg-forest .stars {
+  display: none;
+}
+
+body.bg-forest .app {
+  background: rgba(15, 40, 20, 0.85);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(150, 220, 100, 0.4);
+  box-shadow:
+    0 0 60px rgba(100, 200, 80, 0.3),
+    inset 0 0 40px rgba(150, 220, 100, 0.1);
+  color: #e6f5d6;
+  position: relative;
+  z-index: 2;
+}
+
+body.bg-forest header {
+  background: linear-gradient(90deg, #1a3a1a, #2d5a2d);
+  border-bottom: 2px solid rgba(150, 220, 100, 0.4);
+}
+
+body.bg-forest h1 {
+  color: #b3e6a0;
+  text-shadow: 0 0 20px rgba(150, 220, 100, 0.8);
+}
+
+body.bg-forest .sub {
+  color: #a0d98a;
+}
+
+body.bg-forest .status-dot {
+  background: #a0ff80;
+  box-shadow: 0 0 10px #a0ff80;
+}
+
+body.bg-forest .msg.bot {
+  background: rgba(30, 60, 40, 0.6);
+  border: 1.5px solid rgba(150, 220, 100, 0.4);
+  color: #e6f5d6;
+}
+
+body.bg-forest .msg.bot::before {
+  color: #a0d98a;
+}
+
+body.bg-forest .msg.user {
+  background: linear-gradient(135deg, #2d5a2d, #4a7a3a);
+  border: 1.5px solid rgba(150, 220, 100, 0.5);
+  color: #fff;
+}
+
+body.bg-forest #input {
+  background: rgba(15, 40, 20, 0.8);
+  border-color: rgba(150, 220, 100, 0.5);
+  color: #e6f5d6;
+}
+
+body.bg-forest #input::placeholder {
+  color: rgba(180, 230, 160, 0.4);
+}
+
+body.bg-forest #input:focus {
+  border-color: #a0ff80;
+  box-shadow: 0 0 25px rgba(150, 220, 100, 0.6);
+}
+
+body.bg-forest #send,
+body.bg-forest .mic-btn {
+  background: linear-gradient(135deg, #2d5a2d, #4a7a3a);
+  border-color: #a0d98a;
+  color: #fff;
+}
+
+body.bg-forest .help-btn {
+  background: linear-gradient(135deg, #2d5a2d, #1a3a1a);
+  border-color: #a0d98a;
+}
+
+body.bg-forest .date-divider {
+  color: #a0d98a;
+  background: rgba(30, 60, 40, 0.5);
+}
+
+body.bg-forest .menu,
+body.bg-forest .chats-panel {
+  background: linear-gradient(135deg, #1a3a1a, #2d5a2d);
+  color: #e6f5d6;
+  border-color: rgba(150, 220, 100, 0.4);
+}
+
+@keyframes forestGlow {
+  0% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
 
 /* ============================================================
-   DARK (по умолчанию)
+   СЕВЕРНОЕ СИЯНИЕ — зелёно-фиолетовое, магическое
    ============================================================ */
-body.bg-dark { background: linear-gradient(135deg, #1a0033, #2d1b4e, #4a1e5c); }
+body.bg-aurora {
+  background: linear-gradient(180deg, #0a001f 0%, #1a003a 50%, #0a2a3a 100%);
+}
+
+body.bg-aurora::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse 600px 200px at 30% 20%, rgba(100, 255, 180, 0.4) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 150px at 70% 30%, rgba(180, 100, 255, 0.35) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 120px at 50% 40%, rgba(100, 200, 255, 0.3) 0%, transparent 70%),
+    radial-gradient(ellipse 700px 180px at 20% 50%, rgba(150, 255, 200, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation: auroraMove 15s ease-in-out infinite alternate;
+}
+
+body.bg-aurora .stars {
+  opacity: 0.8;
+}
+
+body.bg-aurora .app {
+  background: rgba(10, 0, 30, 0.85);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(150, 255, 200, 0.4);
+  box-shadow:
+    0 0 60px rgba(100, 255, 180, 0.3),
+    0 0 120px rgba(180, 100, 255, 0.2),
+    inset 0 0 40px rgba(100, 200, 255, 0.1);
+  color: #e6fff5;
+  position: relative;
+  z-index: 2;
+}
+
+body.bg-aurora header {
+  background: linear-gradient(90deg, #0a001f, #1a003a);
+  border-bottom: 2px solid rgba(150, 255, 200, 0.4);
+}
+
+body.bg-aurora h1 {
+  color: #a0ffd0;
+  text-shadow:
+    0 0 20px rgba(100, 255, 180, 0.8),
+    0 0 40px rgba(180, 100, 255, 0.5);
+}
+
+body.bg-aurora .sub {
+  color: #b3ffe0;
+}
+
+body.bg-aurora .status-dot {
+  background: #a0ffd0;
+  box-shadow: 0 0 10px #a0ffd0, 0 0 20px #b3a0ff;
+}
+
+body.bg-aurora .msg.bot {
+  background: rgba(20, 0, 50, 0.7);
+  border: 1.5px solid rgba(150, 255, 200, 0.4);
+  color: #e6fff5;
+}
+
+body.bg-aurora .msg.bot::before {
+  color: #a0ffd0;
+}
+
+body.bg-aurora .msg.user {
+  background: linear-gradient(135deg, #1a003a, #4a2a8a);
+  border: 1.5px solid rgba(150, 255, 200, 0.5);
+  color: #fff;
+}
+
+body.bg-aurora #input {
+  background: rgba(10, 0, 30, 0.8);
+  border-color: rgba(150, 255, 200, 0.5);
+  color: #e6fff5;
+}
+
+body.bg-aurora #input::placeholder {
+  color: rgba(180, 255, 220, 0.4);
+}
+
+body.bg-aurora #input:focus {
+  border-color: #a0ffd0;
+  box-shadow: 0 0 25px rgba(100, 255, 180, 0.6);
+}
+
+body.bg-aurora #send,
+body.bg-aurora .mic-btn {
+  background: linear-gradient(135deg, #1a003a, #4a2a8a);
+  border-color: #a0ffd0;
+  color: #fff;
+}
+
+body.bg-aurora .help-btn {
+  background: linear-gradient(135deg, #1a003a, #4a2a8a);
+  border-color: #a0ffd0;
+}
+
+body.bg-aurora .date-divider {
+  color: #a0ffd0;
+  background: rgba(20, 0, 50, 0.5);
+}
+
+body.bg-aurora .menu,
+body.bg-aurora .chats-panel {
+  background: linear-gradient(135deg, #0a001f, #1a003a);
+  color: #e6fff5;
+  border-color: rgba(150, 255, 200, 0.4);
+}
+
+@keyframes auroraMove {
+  0% {
+    background-position: 0 0, 0 0, 0 0, 0 0;
+    opacity: 0.8;
+  }
+  100% {
+    background-position: 40px 20px, -30px 15px, 20px -20px, -40px 25px;
+    opacity: 1;
+  }
+}
 
 /* ============================================================
    КНОПКА ФОНА
    ============================================================ */
 .bg-toggle {
-  width: 38px; height: 38px; border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
   border: 1.5px solid rgba(255, 255, 255, 0.4);
   background: rgba(255, 255, 255, 0.15);
-  color: #fff; font-size: 16px; cursor: pointer;
-  transition: all 0.2s; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-right: 4px;
 }
-.bg-toggle:hover { background: rgba(255, 255, 255, 0.3); transform: scale(1.1) rotate(20deg); }
+
+.bg-toggle:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1) rotate(20deg);
+}
 
 /* ============================================================
    МЕНЮ ФОНОВ
    ============================================================ */
-.bg-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+.bg-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
 .bg-option {
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  padding: 10px; border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 14px;
   border: 2px solid rgba(255, 150, 255, 0.3);
   background: rgba(255, 255, 255, 0.05);
-  color: #fff; cursor: pointer;
-  transition: all 0.2s; font-family: inherit; font-size: 12px; font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
 }
-.bg-option:hover { border-color: rgba(255, 150, 255, 0.7); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(255, 110, 199, 0.3); }
-.bg-option.active { border-color: #ff6ec7; background: rgba(255, 110, 199, 0.2); box-shadow: 0 0 20px rgba(255, 110, 199, 0.5); }
-.bg-preview { width: 100%; height: 50px; border-radius: 8px; border: 1.5px solid rgba(255, 255, 255, 0.2); }
 
-.dark-preview { background: linear-gradient(135deg, #1a0033, #2d1b4e, #4a1e5c); }
-.matrix-preview { background: #000; background-image: repeating-linear-gradient(90deg, #00ff41 0 2px, transparent 2px 8px); }
-.anime-preview { background: linear-gradient(180deg, #d6f0ff, #e6d6ff, #ffd6f0); }
-.white-preview { background: linear-gradient(135deg, #f5f5f7, #ffffff, #eef0f5); }
-.space-preview { background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%); }
-.cyberpunk-preview { background: linear-gradient(135deg, #0a001f, #1a0033, #0f3460); }
-.sunset-preview { background: linear-gradient(180deg, #2b1055, #7597de, #ff6ec7, #ffb347); }
-.sakura-preview { background: linear-gradient(180deg, #ffb3d9, #ffcce0, #ffe6f0); }
-.ocean-preview { background: linear-gradient(180deg, #003366, #1b5c8a, #6ecfff); }
+.bg-option:hover {
+  border-color: rgba(255, 150, 255, 0.7);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 110, 199, 0.3);
+}
 
+.bg-option.active {
+  border-color: #ff6ec7;
+  background: rgba(255, 110, 199, 0.2);
+  box-shadow: 0 0 20px rgba(255, 110, 199, 0.5);
+}
+
+.bg-preview {
+  width: 100%;
+  height: 50px;
+  border-radius: 8px;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Превью фонов */
+.dark-preview {
+  background: linear-gradient(135deg, #1a0033, #2d1b4e, #4a1e5c);
+}
+
+.matrix-preview {
+  background: #000;
+  background-image: repeating-linear-gradient(90deg, #00ff41 0 2px, transparent 2px 8px);
+}
+
+.anime-preview {
+  background: linear-gradient(180deg, #d6f0ff, #e6d6ff, #ffd6f0);
+}
+
+.white-preview {
+  background: linear-gradient(135deg, #f5f5f7, #ffffff, #eef0f5);
+}
+
+.space-preview {
+  background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+}
+
+.cyberpunk-preview {
+  background: linear-gradient(135deg, #0a001f, #1a0033, #0f3460);
+}
+
+.sunset-preview {
+  background: linear-gradient(180deg, #2b1055, #7597de, #ff6ec7, #ffb347);
+}
+
+.sakura-preview {
+  background: linear-gradient(180deg, #ffb3d9, #ffcce0, #ffe6f0);
+}
+
+.ocean-preview {
+  background: linear-gradient(180deg, #003366, #1b5c8a, #6ecfff);
+}
+
+.forest-preview {
+  background: linear-gradient(180deg, #1a3a1a, #2d5a2d, #4a7a3a);
+}
+
+.aurora-preview {
+  background: linear-gradient(180deg, #0a001f, #1a003a, #0a2a3a);
+}
+
+/* Мобильная версия */
 @media (max-width: 600px) {
-  .bg-toggle { width: 34px; height: 34px; font-size: 14px; }
-  .bg-options { grid-template-columns: repeat(2, 1fr); }
-  .bg-preview { height: 40px; }
+  .bg-toggle {
+    width: 34px;
+    height: 34px;
+    font-size: 14px;
+  }
+
+  .bg-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bg-preview {
+    height: 40px;
+  }
 }

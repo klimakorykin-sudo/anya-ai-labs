@@ -1,11 +1,16 @@
 // ============================================================
-// BACKGROUND.JS — Переключение фона (9 вариантов)
+// BACKGROUND.JS — Переключение фона (11 вариантов)
 // ============================================================
 
 const Background = {
 
   KEY: "anya_background",
-  variants: ["dark", "matrix", "anime", "white", "space", "cyberpunk", "sunset", "sakura", "ocean"],
+  variants: [
+    "dark", "matrix", "anime", "white", "space",
+    "cyberpunk", "sunset", "sakura", "ocean",
+    "forest", "aurora"
+  ],
+
   labels: {
     dark: "🌙 Тёмный",
     matrix: "🟢 Матрица",
@@ -15,7 +20,9 @@ const Background = {
     cyberpunk: "🌃 Киберпанк",
     sunset: "🌅 Закат",
     sakura: "🌸 Сакура",
-    ocean: "🌊 Океан"
+    ocean: "🌊 Океан",
+    forest: "🌲 Лес",
+    aurora: "🌌 Сияние"
   },
 
   current: "dark",

@@ -48,8 +48,12 @@ const PhotosModule = {
   handle(text) {
     const t = text.toLowerCase().trim();
 
-    // === ЗАПОМНИ / СОХРАНИ — НЕ наши ===
-    if (/(запомни|сохрани|запиши|в заметк|в дневник|в избранн)/.test(t)) {
+    // === ИСКЛЮЧЕНИЯ — не наши (важные!) ===
+    // Просьбы, советы, вопросы "как сказать / как признаться / что делать"
+    if (/(код|сочинени|поищи|найди в инет|загугли)/.test(t)) {
+      return null;
+    }
+    if (/(как.*(сказать|признат|признаться|поступ|делать)|что.*делать|посовет|подскажи|как.*ан[ею]|признаться.*ан[ею]|как.*ей|как.*ему)/.test(t)) {
       return null;
     }
 
@@ -63,11 +67,6 @@ const PhotosModule = {
                     || /еще\s+покаж/i.test(t)
                     || /дай.*(фото|себя|аню)/i.test(t)
                     || /можно.*(фото|себя|аню)/i.test(t);
-
-    // Исключения
-    if (/(код|сочинени|поищи|найди в инет|загугли)/.test(t)) {
-      return null;
-    }
 
     if (wantsPhoto) {
       return {
@@ -91,7 +90,7 @@ const PhotosModule = {
       }
     }
 
-    // === Похвала ===
+    // === Похвала (без фото) ===
     for (const trigger of this.praiseTriggers) {
       const re = new RegExp("^" + trigger + "[!?.\\s]*$", "i");
       if (re.test(t)) {
@@ -99,7 +98,7 @@ const PhotosModule = {
       }
     }
 
-    // === Комплимент без контекста ===
+    // === Просто комплимент без контекста ===
     for (const trigger of this.complimentTriggers) {
       if (t === trigger || t === trigger + "!" || t === trigger + ".") {
         return { text: pick(this.photoCompliments) };

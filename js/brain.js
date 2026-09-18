@@ -8,7 +8,7 @@ const Brain = {
     // === ЛИЧНОЕ ===
     NameModule,
     PersonalModule,
-    DeveloperModule,
+    DeveloperDataModule,
     SettingsModule,
     ChatSearch,
 

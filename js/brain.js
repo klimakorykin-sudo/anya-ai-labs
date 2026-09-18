@@ -34,7 +34,7 @@ const Brain = {
     EmergencyModule,
     SafetyModule,
 
-    // === ЗАМЕТКИ / ДНЕВНИК (до фото, чтобы «запомни фото» не путалось) ===
+    // === ЗАМЕТКИ / ДНЕВНИК (до фото) ===
     NotesModule,
     DiaryModule,
     DailyTasksModule,
@@ -63,6 +63,12 @@ const Brain = {
     ChemistryModule,
     PhysicsModule,
     HistoryModule,
+    AstronomyModule,
+    GeologyModule,
+    EcologyModule,
+    PhilosophyModule,
+    EconomicsModule,
+    LawModule,
 
     // === ИЗВЕСТНЫЕ ЛЮДИ ===
     FamousModule,
@@ -103,6 +109,7 @@ const Brain = {
       ? Understand.understandText(trimmed)
       : trimmed.toLowerCase();
 
+    // 0. КРИЗИС
     if (typeof CrisisModule !== "undefined" && CrisisModule.isCrisis(normalized)) {
       return CrisisModule.handle(normalized);
     }
@@ -110,6 +117,7 @@ const Brain = {
     const lang = analyzeText(normalized);
     const emotion = detectEmotion(normalized);
 
+    // Секреты
     if (typeof Secrets !== "undefined") {
       if (Secrets.isSecret(normalized)) {
         return { text: Secrets.randomSecret() };
@@ -120,6 +128,7 @@ const Brain = {
       }
     }
 
+    // Кракозябры
     if (
       lang.hasGarbage &&
       !lang.hasCyr &&
@@ -133,17 +142,19 @@ const Brain = {
       return { text: pick(PHRASES.garbage) };
     }
 
+    // Поиск в интернете
     if (typeof SearchModule !== "undefined" && SearchModule.detectSearchRequest(normalized)) {
       const query = SearchModule.extractQuery(normalized);
       const result = await SearchModule.simulateSearch(query);
       return { text: result, isHTML: true };
     }
 
+    // Прогон через модули
     for (const module of this.modules) {
       try {
         if (!module || typeof module.handle !== "function") continue;
         const reply = await module.handle(normalized);
-        if (reply && (reply.text || reply.photo || reply.graphCanvas)) {
+        if (reply && (reply.text || reply.photo || reply.graphCanvas || reply.photoList)) {
           if (reply.text && /<pre>|<a |<b>|<code>/.test(reply.text)) {
             reply.isHTML = true;
           }
@@ -154,6 +165,7 @@ const Brain = {
       }
     }
 
+    // Простые фразы
     const t = normalized;
 
     if (/(кто.*лучш|лучшая|идеал.*разработчик|аня.*лучш)/.test(t)) {
@@ -180,6 +192,7 @@ const Brain = {
       return { text: pick(PHRASES.thanks) };
     }
 
+    // ПОКА — только отдельное слово
     if (/(^|\s)пока(\s|$|[!?.,])/i.test(t) ||
         /(^|\s)bye(\s|$|[!?.,])/i.test(t) ||
         /(до\s+свид|прощай|(^|\s)бай(\s|$|[!?.,]))/i.test(t)) {
